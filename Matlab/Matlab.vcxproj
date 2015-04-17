@@ -77,6 +77,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Compiladores.cpp" />
+    <ClCompile Include="Versao_colegas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entrada.m" />

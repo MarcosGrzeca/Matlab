@@ -18,6 +18,9 @@
     <ClCompile Include="Compiladores.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Versao_colegas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entrada.m">
