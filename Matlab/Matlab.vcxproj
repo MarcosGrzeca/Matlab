@@ -78,6 +78,9 @@
   <ItemGroup>
     <ClCompile Include="Compiladores.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Entrada.m" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
