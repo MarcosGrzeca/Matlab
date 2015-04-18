@@ -86,8 +86,14 @@ struct token {
 	int tk;
 	int linha;
 	int coluna;
+	char elemento[200];
 };
 
+struct _ret{
+	int ret;
+	char cod[200];
+	void *place;
+};
 
 int tk;
 int linha = 1, coluna = 0;
@@ -407,6 +413,8 @@ void leToken()
 		tokens[posTK].tk = tk;
 		tokens[posTK].linha = linha;
 		tokens[posTK].coluna = coluna;
+		//tokens[posTK].elemento = lex;
+		strncpy_s(tokens[posTK].elemento,lex,sizeof(lex));
 		fprintf(newFile, "Token: %d\t Linha: %d\t Coluna: %d\tLex: %s \n", tk, linha, coluna, lex);
 		coluna += strlen(lex) - 1;
 		if (lex[strlen(lex) - 1] == '\n')
@@ -480,14 +488,23 @@ int COMP0();
 int BLOCO();
 int VAL();
 
-int id()
+_ret id()
 {
+	_ret analise;
+	
 	if (tk == TKId)
 	{
+
 		leToken();
-		return 1;
+		analise.ret = 1;
+		//analise.cod = tokens[posTK].elemento;
+		strncpy_s(analise.cod,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
+		
+		//analise.place = tk;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 int cte()
@@ -522,7 +539,7 @@ int cte()
 
 int ATRIB()
 {
-	if (id())
+	if (id().ret)
 	{
 		if (tk == TKAtrib)
 		{
@@ -557,7 +574,7 @@ int EXPFIM()
 		return 0;
 	}
 	int marcaPos = setPos();
-	if (id())
+	if (id().ret)
 	{
 		return 1;
 	}
@@ -1217,7 +1234,7 @@ int PARAM0()
 
 int FUNCTION()
 {
-	if (id())
+	if (id().ret)
 	{
 		if (tk == TKAbrePar)
 		{
@@ -1380,7 +1397,7 @@ int SWITCH()
 	if (tk == TKSwitch)
 	{
 		leToken();
-		if (id())
+		if (id().ret)
 		{
 			if (CASE())
 			{
@@ -1492,7 +1509,7 @@ int VAL()
 		return 1;
 	}
 	voltaPos(marcaPos);
-	if (id())
+	if (id().ret)
 	{
 		return 1;
 	}
