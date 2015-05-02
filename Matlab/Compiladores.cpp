@@ -101,6 +101,7 @@ char* characters;
 struct token* tokens;
 int pos = 0, posTK = -1, ultPosTK = -1;
 FILE * newFile;
+FILE * portugues;
 size_t space = 1;
 
 int palavra_reservada(char lex[])
@@ -485,7 +486,7 @@ int EXP0();
 int FUNCTION();
 int EXP1();
 int COMP0();
-int BLOCO();
+_ret BLOCO();
 int VAL();
 
 _ret id()
@@ -537,8 +538,10 @@ int cte()
 	return 0;
 }
 
-int ATRIB()
+_ret ATRIB()
 {
+
+	_ret analise;
 	if (id().ret)
 	{
 		if (tk == TKAtrib)
@@ -546,14 +549,19 @@ int ATRIB()
 			leToken();
 			if (VAL())
 			{
-				return 1;
+				analise.ret = 1;
+				strncpy_s(analise.cod,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
+				return analise;
 			}
 			erroVal();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 int EXPFIM()
@@ -1045,7 +1053,7 @@ int	ELSE()
 	if (tk == TKElse)
 	{
 		leToken();
-		if (BLOCO())
+		if (BLOCO().ret)
 		{
 			return 1;
 		}
@@ -1061,7 +1069,7 @@ int	ELSE()
 				if (tk == TKFechaPar)
 				{
 					leToken();
-					if (BLOCO())
+					if (BLOCO().ret)
 					{
 						if (tk == TKElse || tk == TKElseIf)
 						{
@@ -1099,7 +1107,7 @@ int IF()
 				if (tk == TKFechaPar)
 				{
 					leToken();
-					if (BLOCO())
+					if (BLOCO().ret)
 					{
 						if (tk == TKElse || tk == TKElseIf)
 						{
@@ -1134,12 +1142,12 @@ int TRY()
 	if (tk == TKTry)
 	{
 		leToken();
-		if (BLOCO())
+		if (BLOCO().ret)
 		{
 			if (tk == TKCatch)
 			{
 				leToken();
-				if (BLOCO())
+				if (BLOCO().ret)
 				{
 					if (tk == TKEnd)
 					{
@@ -1166,7 +1174,7 @@ int CRIAFUNCTION()
 		leToken();
 		if (FUNCTION())
 		{
-			if (BLOCO())
+			if (BLOCO().ret)
 			{
 				if (tk == TKEnd)
 				{
@@ -1258,7 +1266,7 @@ int FUNCTION()
 
 int PARFOR()
 {
-	if (ATRIB())
+	if (ATRIB().ret)
 	{
 		if (tk == TKDoisPontos)
 		{
@@ -1268,7 +1276,7 @@ int PARFOR()
 				if (tk == TKPontoeVirg)
 				{
 					leToken();
-					if (BLOCO())
+					if (BLOCO().ret)
 					{
 						if (tk == TKPontoeVirg)
 						{
@@ -1364,7 +1372,7 @@ int CASE()
 		leToken();
 		if (CASEVALUE0())
 		{
-			if (BLOCO())
+			if (BLOCO().ret)
 			{
 				if (tk == TKCase || tk == TKOtherwise)
 				{
@@ -1383,7 +1391,7 @@ int CASE()
 	else if (tk == TKOtherwise)
 	{
 		leToken();
-		if (BLOCO())
+		if (BLOCO().ret)
 		{
 			return 1;
 		}
@@ -1429,7 +1437,7 @@ int	WHILE()
 				if (tk == TKFechaPar)
 				{
 					leToken();
-					if (BLOCO())
+					if (BLOCO().ret)
 					{
 						if (tk == TKEnd)
 						{
@@ -1457,7 +1465,7 @@ int FOR()
 	if (tk == TKFor)
 	{
 		leToken();
-		if (ATRIB())
+		if (ATRIB().ret)
 		{
 			if (tk == TKDoisPontos)
 			{
@@ -1473,7 +1481,7 @@ int FOR()
 							return 0;
 						}
 					}
-					if (BLOCO())
+					if (BLOCO().ret)
 					{
 						if (tk == TKEnd)
 						{
@@ -1524,7 +1532,7 @@ int VAL()
 int COMANDO()
 {
 	int marcaPos = setPos();
-	if (ATRIB())
+	if (ATRIB().ret)
 	{
 		return 1;
 	}
@@ -1592,8 +1600,10 @@ int COMANDO()
 	return 0;
 }
 
-int BLOCO()
+_ret BLOCO()
 {
+
+	_ret analise;
 	if (COMANDO())
 	{
 		if (tk == TKPontoeVirg)
@@ -1604,29 +1614,48 @@ int BLOCO()
 			tk == TKIf || tk == TKTry || tk == TKParfor || tk == TKFunction ||
 			tk == TKBreak || tk == TKContinue || tk == TKReturn)
 		{
-			if (BLOCO())
+
+			_ret bloco = BLOCO();
+			if (bloco.ret)
 			{
-				return 1;
+				analise.cod = bloco.cod;
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
 	else
 	{
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 }
 
-int INICIO()
+void atribuirCod(_ret *vet, char string) {
+	strncpy_s((*vet).cod, string, sizeof(string));
+//	strncpy_s((*vet).cod, "teste", sizeof("teste"));
+}
+
+_ret INICIO()
 {
-	if (BLOCO())
+	_ret analise;
+
+	_ret bloco = BLOCO();
+	if (bloco.ret)
 	{
-		return 1;
+		analise.ret = 1;
+//		strcpy(analise.cod, bloco.cod);
+		strncpy_s(analise.cod,bloco.cod,sizeof(bloco.cod));
+		return analise;
 	}
 	else
 	{
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 }
 
@@ -1665,20 +1694,36 @@ int main()
 		exit(1);
 	}
 
+	portugues = fopen("Portugues.lex", "wb+");
+
+	if (portugues == NULL)
+	{
+		printf("Erro ao abrir o arquivo de saida (Portugues.lex).\n");
+		getchar();
+		exit(1);
+	}
+
+
 	leToken();
 	while (tk != TKFim)
 	{
-		if (!INICIO())
+
+		_ret inicio = INICIO();
+
+		if (!inicio.ret)
 		{
 			ocorreuErro();
 			getchar();
 			return 0;
 		}
+		fprintf(portugues, "%s \n", inicio.cod);
 		leToken();
 	}
 
 
 	fclose(newFile);
+	fclose(portugues);
+
 
 	printf("Arquivo gerado com sucesso!");
 
