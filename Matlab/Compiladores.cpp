@@ -103,6 +103,7 @@ int pos = 0, posTK = -1, ultPosTK = -1;
 FILE * newFile;
 FILE * portugues;
 size_t space = 1;
+struct _ret* s_ret;
 
 void escreverStringPort(char string) {
 	fprintf(portugues, "%s \n", string);
@@ -1737,6 +1738,7 @@ int main()
 
 	FILE * fp = fopen("Entrada.m", "r");
 
+	s_ret = (_ret*) malloc(sizeof(_ret));
 	if (fp == NULL)
 	{
 		printf("Erro ao abrir o arquivo de entrada (Entrada.m).\n");
