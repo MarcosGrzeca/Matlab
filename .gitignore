@@ -1,5 +1,9 @@
 *.tlog
+<<<<<<< Updated upstream
 Matlab.sdf
 Matlab/Matlab.vcxproj.user
 *.opensdf
 Matlab.sdf
+=======
+*.pdb
+>>>>>>> Stashed changes

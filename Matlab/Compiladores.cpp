@@ -487,9 +487,9 @@ int setPos()
 	return posTK;
 }
 
-int EXP0();
+_ret EXP0();
 int FUNCTION();
-int EXP1();
+_ret EXP1();
 _ret COMP0();
 _ret BLOCO();
 _ret VAL();
@@ -497,7 +497,7 @@ _ret VAL();
 _ret id()
 {
 	_ret analise;
-	
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKId)
 	{
 
@@ -511,40 +511,59 @@ _ret id()
 	return analise;
 }
 
-int cte()
+_ret cte()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKConstanteInteira)
 	{
 		leToken();
-		return 1;
+		int indice = posTK - 1;
+		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
+		analise.ret = 1;
+		return analise;
 	}
 	if (tk == TKConstanteReal)
 	{
 		leToken();
-		return 1;
+		int indice = posTK - 1;
+		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
+		analise.ret = 1;
+		return analise;
 	}
 	if (tk == TKString)
 	{
 		leToken();
-		return 1;
+		int indice = posTK - 1;
+		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
+		analise.ret = 1;
+		return analise;
 	}
 	if (tk == TKTrue)
 	{
 		leToken();
-		return 1;
+		int indice = posTK - 1;
+		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
+		analise.ret = 1;
+		return analise;
 	}
 	if (tk == TKFalse)
 	{
 		leToken();
-		return 1;
+		int indice = posTK - 1;
+		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret ATRIB()
 {
 
 	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	_ret ident = id();
 	if (ident.ret)
 	{
@@ -555,8 +574,6 @@ _ret ATRIB()
 			if (val.ret)
 			{
 				analise.ret = 1;
-				//strncpy_s(analise.cod,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
-				
 				strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
 				strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));	
 				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
@@ -578,7 +595,8 @@ int EXPFIM()
 	if (tk == TKAbrePar)
 	{
 		leToken();
-		if (EXP1())
+		_ret exp1 = EXP1();
+		if (exp1.ret)
 		{
 			if (tk == TKFechaPar)
 			{
@@ -596,7 +614,7 @@ int EXPFIM()
 		return 1;
 	}
 	voltaPos(marcaPos);
-	if (cte())
+	if (cte().ret)
 	{
 		return 1;
 	}
@@ -730,262 +748,418 @@ int EXP10()
 	return 0;
 }
 
-int EXP9()
+_ret EXP9()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (EXP11())
 	{
+		//strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
 		if (tk == TKDivisao)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			if (EXP10())
 			{
-				return 1;
+				//strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP8()
+_ret EXP8()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKMultiplicacao)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP9())
+		_ret exp9 = EXP9();
+		if (exp9.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp9.cod, sizeof(exp9.cod));
 			if (tk == TKMultiplicacao)
 			{
-				if (EXP8())
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret exp8 = EXP8();
+				if (exp8.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp8.cod, sizeof(exp8.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP7()
+_ret EXP7()
 {
-	if (EXP9())
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+	_ret exp9 = EXP9();
+	if (exp9.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), exp9.cod, sizeof(exp9.cod));
 		if (tk == TKMultiplicacao)
 		{
-			if (EXP8())
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret exp8 = EXP8();
+			if (exp8.ret)
 			{
-				return 1;
+				strncat_s(analise.cod, sizeof(analise.cod), exp8.cod, sizeof(exp8.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP6()
+_ret EXP6()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKOuBinario)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP7())
+		_ret exp7 = EXP7();
+		if (exp7.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp7.cod, sizeof(exp7.cod));
 			if (tk == TKOuBinario)
 			{
-				if (EXP6())
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret exp6 = EXP6();
+				if (exp6.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp6.cod, sizeof(exp6.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP5()
+_ret EXP5()
 {
-	if (EXP7())
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+	_ret exp7 = EXP7();
+	if (exp7.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), exp7.cod, sizeof(exp7.cod));
 		if (tk == TKOuBinario)
 		{
-			if (EXP6())
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret exp6 = EXP6();
+			if (exp6.ret)
 			{
-				return 1;
+				strncat_s(analise.cod, sizeof(analise.cod), exp6.cod, sizeof(exp6.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP4()
+_ret EXP4()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKSubtracao)
 	{
+		strncpy_s(analise.cod, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP5())
+		_ret exp5 = EXP5();
+		if (exp5.ret)
 		{
 			if (tk == TKSubtracao)
 			{
-				if (EXP4())
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret exp4 = EXP4();
+				if (exp4.ret)
 				{
-					return 1;
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP3()
+_ret EXP3()
 {
-	if (EXP5())
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+	_ret exp5 = EXP5();
+	if (exp5.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), exp5.cod, sizeof(exp5.cod));
 		if (tk == TKSubtracao)
 		{
-			if (EXP4())
+			strncat_s(analise.cod, sizeof(analise.cod), "-", sizeof("-"));
+			_ret exp4 = EXP4();
+			if (exp4.ret)
 			{
-				return 1;
+				strncat_s(analise.cod, sizeof(analise.cod), exp4.cod, sizeof(exp4.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP2()
+_ret EXP2()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKSoma)
 	{
 		leToken();
-		if (EXP3())
+		_ret exp3 = EXP3();
+		if (exp3.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp3.cod, sizeof(exp3.cod));
 			if (tk == TKSoma)
 			{
-				if (EXP2())
+				strncat_s(analise.cod, sizeof(analise.cod), "+", sizeof("+"));
+				_ret exp2 = EXP2();
+				if (exp2.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp2.cod, sizeof(exp2.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP1()
+_ret EXP1()
 {
-	if (EXP3())
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+	_ret exp3 = EXP3(); 
+	if (exp3.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), exp3.cod, sizeof(exp3.cod));
 		if (tk == TKSoma)
 		{
-			if (EXP2())
+			strncat_s(analise.cod, sizeof(analise.cod), "+", sizeof("+"));
+			_ret exp2 = EXP2();
+			if (exp2.ret)
 			{
-				return 1;
+				strncat_s(analise.cod, sizeof(analise.cod), exp2.cod, sizeof(exp2.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int COMP5()
+_ret COMP5()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKAbrePar)
 	{
+		strncpy_s(analise.cod,"(",sizeof(")"));
 		leToken();
-		if (COMP0().ret){
+		_ret comp0 = COMP0();
+		if (comp0.ret){
+			strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
 			if (tk == TKFechaPar)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), ")", sizeof(")"));
 				leToken();
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
 			erroFechaPar();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	if (EXP1())
+	_ret exp1 = EXP1();
+	if (exp1.ret)
 	{
+		//strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
 		if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
 			tk == TKIgual || tk == TKDiferente)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (EXP1())
+
+			_ret exp1_1 = EXP1();
+			if (exp1_1.ret)
 			{
-				return 1;
+				strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
+				analise.ret = 1;
+				return analise;
 			}
 			erroExpInvalida();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int COMP4()
+_ret COMP4()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKNegacao)
 	{
+		strncpy_s(analise.cod,"-",sizeof("-"));
 		leToken();
-		if (COMP5())
+		_ret comp5 = COMP5();
+		if (comp5.ret)
 		{
-			return 1;
+			analise.ret = 1;
+			strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
+	} else {
+		_ret comp5 = COMP5();
+		if (comp5.ret) {
+			strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
+			analise.ret = 1;
+			return analise;
+		}
+		else
+		{
+			analise.ret = 0;
+			return analise;
+		}
 	}
-	else if (COMP5())
+	/*else if (COMP5())
 	{
-		return 1;
+		//strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
+		analise.ret = 1;
+		return analise;
 	}
 	else
 	{
-		return 0;
-	}
+		analise.ret = 0;
+		return analise;
+	}*/
 }
 
-int COMP3()
+_ret COMP3()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKELogico)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
 		leToken();
-		if (COMP4())
+		_ret comp4 = COMP4();
+		if (comp4.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, strlen(comp4.cod));
 			if (tk == TKELogico)
 			{
-				if (COMP3())
+				strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+				_ret comp3 = COMP3();
+				if (comp3.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), comp3.cod, sizeof(comp3.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 0;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 	else
 	{
-		return 0;
+		analise.ret = 0;
+		return analise;		
 	}
 }
 
@@ -994,12 +1168,17 @@ _ret COMP2()
 
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
-	if (COMP4())
+	_ret comp4 = COMP4();
+	if (comp4.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, sizeof(comp4.cod));
 		if (tk == TKELogico)
 		{
-			if (COMP3())
+			strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+			_ret comp3 = COMP3();
+			if (comp3.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), comp3.cod, sizeof(comp3.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1016,30 +1195,43 @@ _ret COMP2()
 	}
 }
 
-int COMP1()
+_ret COMP1()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKOuLogico)
 	{
+		strncpy_s(analise.cod,"|",sizeof("|"));
 		leToken();
-		if (COMP2().ret)
+		_ret comp2 = COMP2();
+		if (comp2.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), comp2.cod, sizeof(comp2.cod));
 			if (tk == TKOuLogico)
 			{
-				if (COMP1())
+				strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
+				_ret comp1 = COMP1();
+				if (comp1.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), comp1.cod, sizeof(comp1.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 
 	}
 	else
 	{
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 }
 
@@ -1054,8 +1246,10 @@ _ret COMP0()
 		if (tk == TKOuLogico)
 		{
 			strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
-			if (COMP1())
+			_ret comp1 = COMP1();
+			if (comp1.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), comp1.cod, sizeof(comp1.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1356,7 +1550,7 @@ int PARFOR()
 
 int CASEVALUE2()
 {
-	if (cte())
+	if (cte().ret)
 	{
 		if (tk == TKVirgula)
 		{
@@ -1374,7 +1568,7 @@ int CASEVALUE2()
 
 int CASEVALUE1()
 {
-	if (cte())
+	if (cte().ret)
 	{
 		if (tk == TKVirgula)
 		{
@@ -1392,7 +1586,7 @@ int CASEVALUE1()
 
 int CASEVALUE0()
 {
-	if (cte())
+	if (cte().ret)
 	{
 		return 1;
 	}
@@ -1557,9 +1751,10 @@ _ret VAL()
 {
 	int marcaPos = setPos();
 	_ret analise;
-	strncpy_s(analise.cod,"MARCOS",sizeof("MARCOS"));
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (FUNCTION())
 	{
+		//strncpy_s(analise.cod, bloco.cod,sizeof(bloco.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1573,14 +1768,18 @@ _ret VAL()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (id().ret)
+	_ret aid = id();
+	if (aid.ret)
 	{
+		strncpy_s(analise.cod, aid.cod,sizeof(aid.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (cte())
+	_ret constan = cte();
+	if (constan.ret)
 	{
+		strncpy_s(analise.cod, constan.cod,sizeof(constan.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1598,7 +1797,7 @@ _ret COMANDO()
 
 	if (atrib.ret)
 	{
-		fprintf(portugues, "%s \n", atrib.cod);
+		strncpy_s(analise.cod, atrib.cod,sizeof(atrib.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1689,9 +1888,10 @@ _ret BLOCO()
 	_ret comando = COMANDO();
 	if (comando.ret)
 	{
+		strncpy_s(analise.cod,comando.cod,sizeof(comando.cod));
 		if (tk == TKPontoeVirg)
 		{
-			fprintf(portugues, "%s \n", ";");
+			strncat_s(analise.cod, sizeof(analise.cod), ";\n", sizeof(";\n"));
 			leToken();
 		}
 		if (tk == TKId || tk == TKFor || tk == TKWhile || tk == TKSwitch ||
@@ -1702,7 +1902,7 @@ _ret BLOCO()
 			_ret bloco = BLOCO();
 			if (bloco.ret)
 			{
-	//			analise.cod = bloco.cod;
+				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1727,6 +1927,7 @@ _ret BLOCO()
 _ret INICIO()
 {
 	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 
 	_ret bloco = BLOCO();
 	if (bloco.ret)
@@ -1734,6 +1935,7 @@ _ret INICIO()
 		analise.ret = 1;
 //		strcpy(analise.cod, bloco.cod);
 //		strncpy_s(analise.cod,bloco.cod,sizeof(bloco.cod));
+		fprintf(portugues, "%s \n", bloco.cod);
 		return analise;
 	}
 	else
