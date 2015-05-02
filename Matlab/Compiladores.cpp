@@ -1072,14 +1072,18 @@ _ret COMP0()
 	}
 }
 
-int	ELSE()
+_ret ELSE()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKElse)
 	{
 		leToken();
+		strncpy_s(analise.cod, "SENAO", sizeof("SENAO"));
 		if (BLOCO().ret)
 		{
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 	}
 	else if (tk == TKElseIf)
@@ -1097,25 +1101,33 @@ int	ELSE()
 					{
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							if (ELSE())
+							if (ELSE().ret)
 							{
-								return 1;
+								analise.ret = 1;
+								return analise;
 							}
-							return 0;
+							analise.ret = 0;
+							return analise;
 						}
-						return 1;
+						analise.ret = 1;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
 				erroFechaPar();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
 			erroAbrePar();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret IF()
@@ -1138,7 +1150,7 @@ _ret IF()
 					{
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							if (!ELSE())
+							if (!ELSE().ret)
 							{
 								analise.ret = 0;
 								return analise;
@@ -1173,7 +1185,9 @@ _ret IF()
 }
 
 int TRY()
-{
+{	
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKTry)
 	{
 		leToken();
