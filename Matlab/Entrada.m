@@ -3,3 +3,4 @@ b = 5
 if (r == c)
 	c = r;
 end
+c = a + b
