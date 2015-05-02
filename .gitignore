@@ -1,1 +1,5 @@
 *.tlog
+Matlab.sdf
+Matlab/Matlab.vcxproj.user
+*.opensdf
+Matlab.sdf
