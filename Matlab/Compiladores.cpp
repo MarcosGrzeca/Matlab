@@ -90,8 +90,8 @@ struct token {
 };
 
 struct _ret{
-	int ret = 0;
-	char cod[200] = "";
+	int ret;
+	char cod[200];
 	void *place;
 };
 
@@ -992,6 +992,7 @@ _ret COMP2()
 {
 
 	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (COMP4())
 	{
 		if (tk == TKELogico)
