@@ -1117,10 +1117,13 @@ int	ELSE()
 	return 0;
 }
 
-int IF()
+_ret IF()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"", sizeof(""));
 	if (tk == TKIf)
 	{
+		strncpy_s(analise.cod,"SE", sizeof("SE"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1136,28 +1139,36 @@ int IF()
 						{
 							if (!ELSE())
 							{
-								return 0;
+								analise.ret = 0;
+								return analise;
 							}
 						}
 						if (tk == TKEnd)
 						{
 							leToken();
-							return 1;
+							analise.ret = 1;
+							return analise;
 						}
 						erroEnd();
-						return 0;
+						analise.ret = 0;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
 				erroFechaPar();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
 		erroAbrePar();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 int TRY()
@@ -1565,6 +1576,7 @@ _ret VAL()
 _ret COMANDO()
 {
 	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	int marcaPos = setPos();
 
 	_ret atrib = ATRIB();
@@ -1594,8 +1606,10 @@ _ret COMANDO()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (IF())
+	_ret cmdIf = IF();
+	if (cmdIf.ret)
 	{
+		strncpy_s(analise.cod,cmdIf.cod,sizeof(cmdIf.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1656,7 +1670,7 @@ _ret BLOCO()
 {
 
 	_ret analise;
-
+	strncpy_s(analise.cod,"",sizeof(""));
 	_ret comando = COMANDO();
 	if (comando.ret)
 	{
