@@ -7,3 +7,6 @@ Matlab.sdf
 =======
 *.pdb
 >>>>>>> Stashed changes
+*.pdb
+Debug/Matlab.ilk
+*.tlog
