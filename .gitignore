@@ -10,3 +10,6 @@ Matlab.sdf
 *.pdb
 Debug/Matlab.ilk
 *.tlog
+*.sdf
+Matlab.sdf
+*.suo
