@@ -708,59 +708,83 @@ int EXP12()
 	return 0;
 }
 
-int EXP11()
+_ret EXP11()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (EXP13())
 	{
+		//strncat_s(analise.cod, sizeof(analise.cod), exp32.cod, sizeof(exp13.cod));
 		if (tk == TKEBinario)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			if (EXP12())
 			{
-				return 1;
+				//strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP10()
+_ret EXP10()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKDivisao)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP11())
+		_ret exp11 = EXP11();
+		if (exp11.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
 			if (tk == TKDivisao)
 			{
-				if (EXP10())
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret exp10 = EXP10();
+				if (exp10.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret EXP9()
 {
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
-	if (EXP11())
+	_ret exp11 = EXP11();
+	if (exp11.ret)
 	{
-		//strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
+		strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
 		if (tk == TKDivisao)
 		{
 			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			if (EXP10())
+			_ret exp10 = EXP10();
+			if (exp10.ret)
 			{
-				//strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
+				strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
 				analise.ret = 1;
 				return analise;
 			}
