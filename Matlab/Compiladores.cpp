@@ -488,7 +488,7 @@ int setPos()
 }
 
 _ret EXP0();
-int FUNCTION();
+_ret FUNCTION();
 _ret EXP1();
 _ret COMP0();
 _ret BLOCO();
@@ -619,7 +619,7 @@ int EXPFIM()
 		return 1;
 	}
 	voltaPos(marcaPos);
-	if (FUNCTION())
+	if (FUNCTION().ret)
 	{
 		return 1;
 	}
@@ -1402,12 +1402,13 @@ _ret IF()
 	return analise;
 }
 
-int TRY()
+_ret TRY()
 {	
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKTry)
 	{
+		strncpy_s(analise.cod, "TRY", sizeof("TRY"));
 		leToken();
 		if (BLOCO().ret)
 		{
@@ -1419,43 +1420,56 @@ int TRY()
 					if (tk == TKEnd)
 					{
 						leToken();
-						return 1;
+						analise.ret = 1;
+						return analise;
 					}
 					erroEnd();
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
 			msgErro("CATCH faltando!");
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int CRIAFUNCTION()
+_ret CRIAFUNCTION()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKFunction)
 	{
 		leToken();
-		if (FUNCTION())
+		if (FUNCTION().ret)
 		{
 			if (BLOCO().ret)
 			{
 				if (tk == TKEnd)
 				{
 					leToken();
-					return 1;
+					analise.ret = 1;
+					return analise;
 				}
 				erroEnd();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 int PARAM2()
@@ -1468,8 +1482,10 @@ int PARAM2()
 	return 0;
 }
 
-int PARAM1()
+_ret PARAM1()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKVirgula)
 	{
 		leToken();
@@ -1477,62 +1493,82 @@ int PARAM1()
 		{
 			if (tk == TKVirgula)
 			{
-				if (PARAM1())
+				if (PARAM1().ret)
 				{
-					return 1;
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int PARAM0()
+_ret PARAM0()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (PARAM2())
 	{
 		if (tk == TKVirgula)
 		{
-			if (PARAM1())
+			if (PARAM1().ret)
 			{
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int FUNCTION()
+_ret FUNCTION()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (id().ret)
 	{
 		if (tk == TKAbrePar)
 		{
 			leToken();
-			if (PARAM0())
+			if (PARAM0().ret)
 			{
 				if (tk == TKFechaPar)
 				{
 					leToken();
-					return 1;
+					analise.ret = 1;
+					return analise;
 				}
 				erroFechaPar();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int PARFOR()
+_ret PARFOR()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (ATRIB().ret)
 	{
 		if (tk == TKDoisPontos)
@@ -1550,149 +1586,195 @@ int PARFOR()
 							leToken();
 							if (tk == TKEnd)
 							{
-								return 1;
+								analise.ret = 1;
+								return analise;
 							}
 							erroEnd();
-							return 0;
+							analise.ret = 0;
+							return analise;
 						}
 						msgErro("Ponto e virgula esperado");
-						return 0;
+						analise.ret = 0;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
 				msgErro("Ponto e virgula esperado");
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
 			erroVal();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
 		erroDoisPt();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int CASEVALUE2()
+_ret CASEVALUE2()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (cte().ret)
 	{
 		if (tk == TKVirgula)
 		{
 			leToken();
-			if (CASEVALUE2())
+			if (CASEVALUE2().ret)
 			{
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int CASEVALUE1()
+_ret CASEVALUE1()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (cte().ret)
 	{
 		if (tk == TKVirgula)
 		{
 			leToken();
-			if (CASEVALUE2())
+			if (CASEVALUE2().ret)
 			{
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int CASEVALUE0()
+_ret CASEVALUE0()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (cte().ret)
 	{
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
 	else if (tk == TKAbreChave)
 	{
 		leToken();
-		if (CASEVALUE1())
+		if (CASEVALUE1().ret)
 		{
 			if (tk == TKFechaChave)
 			{
 				leToken();
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
 			msgErro("Falta fechar as chaves");
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int CASE()
+_ret CASE()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKCase)
 	{
 		leToken();
-		if (CASEVALUE0())
+		if (CASEVALUE0().ret)
 		{
 			if (BLOCO().ret)
 			{
 				if (tk == TKCase || tk == TKOtherwise)
 				{
-					if (CASE())
+					if (CASE().ret)
 					{
-						return 1;
+						analise.ret = 1;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 	else if (tk == TKOtherwise)
 	{
 		leToken();
 		if (BLOCO().ret)
 		{
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int SWITCH()
+_ret SWITCH()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKSwitch)
 	{
 		leToken();
 		if (id().ret)
 		{
-			if (CASE())
+			if (CASE().ret)
 			{
 				if (tk == TKEnd)
 				{
 					leToken();
-					return 1;
+					analise.ret = 1;
+					return analise;
 				}
 				erroEnd();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int	WHILE()
+_ret WHILE()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKWhile)
 	{
 		leToken();
@@ -1709,26 +1791,35 @@ int	WHILE()
 						if (tk == TKEnd)
 						{
 							leToken();
-							return 1;
+							analise.ret = 1;
+							return analise;
 						}
 						erroEnd();
-						return 0;
+						analise.ret = 0;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
 				erroFechaPar();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
 		erroAbrePar();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int FOR()
+_ret FOR()
 {
+	_ret analise;
+	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKFor)
 	{
 		leToken();
@@ -1745,7 +1836,8 @@ int FOR()
 						if (!VAL().ret)
 						{
 							erroVal();
-							return 0;
+							analise.ret = 0;
+							return analise;
 						}
 					}
 					if (BLOCO().ret)
@@ -1753,22 +1845,29 @@ int FOR()
 						if (tk == TKEnd)
 						{
 							leToken();
-							return 1;
+							analise.ret = 1;
+							return analise;
 						}
 						erroEnd();
-						return 0;
+						analise.ret = 0;
+						return analise;
 					}
-					return 0;
+					analise.ret = 0;
+					return analise;
 				}
 				erroVal();
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
 			erroDoisPt();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret VAL()
@@ -1776,7 +1875,7 @@ _ret VAL()
 	int marcaPos = setPos();
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
-	if (FUNCTION())
+	if (FUNCTION().ret)
 	{
 		//strncpy_s(analise.cod, bloco.cod,sizeof(bloco.cod));
 		analise.ret = 1;
@@ -1826,19 +1925,19 @@ _ret COMANDO()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (FOR())
+	if (FOR().ret)
 	{
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (WHILE())
+	if (WHILE().ret)
 	{
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (SWITCH())
+	if (SWITCH().ret)
 	{
 		analise.ret = 1;
 		return analise;
@@ -1852,25 +1951,25 @@ _ret COMANDO()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (TRY())
+	if (TRY().ret)
 	{
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (PARFOR())
+	if (PARFOR().ret)
 	{
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (CRIAFUNCTION())
+	if (CRIAFUNCTION().ret)
 	{
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (FUNCTION())
+	if (FUNCTION().ret)
 	{
 		analise.ret = 1;
 		return analise;
