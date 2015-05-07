@@ -1,6 +1,8 @@
+inicio
 
-se(r==c)
-entao
+SE (r==c) ENTAO
 	c=r;
-fimse
- 
+SENAO
+	r=c;
+FIMSE
+fimalgoritmo 

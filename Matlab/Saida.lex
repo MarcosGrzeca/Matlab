@@ -8,4 +8,9 @@ Token: 1	 Linha: 2	 Coluna: 2	Lex: c
 Token: 11	 Linha: 2	 Coluna: 4	Lex: = 
 Token: 1	 Linha: 2	 Coluna: 6	Lex: r 
 Token: 18	 Linha: 2	 Coluna: 7	Lex: ; 
-Token: 7	 Linha: 3	 Coluna: 1	Lex: end 
+Token: 9	 Linha: 3	 Coluna: 1	Lex: else 
+Token: 1	 Linha: 4	 Coluna: 2	Lex: r 
+Token: 11	 Linha: 4	 Coluna: 4	Lex: = 
+Token: 1	 Linha: 4	 Coluna: 6	Lex: c 
+Token: 18	 Linha: 4	 Coluna: 7	Lex: ; 
+Token: 7	 Linha: 5	 Coluna: 1	Lex: end 

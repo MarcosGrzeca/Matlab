@@ -1369,7 +1369,7 @@ _ret ELSE()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKElse)
 	{
-		strncpy_s(analise.cod, "SENAO", sizeof("SENAO"));
+		strncpy_s(analise.cod, "SENAO\n\t", sizeof("SENAO\n\t"));
 		leToken();
 		_ret bloco = BLOCO();
 		if (bloco.ret)
@@ -1381,7 +1381,7 @@ _ret ELSE()
 	}
 	else if (tk == TKElseIf)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE", sizeof("SENAO SE"));
+		strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE\n\t", sizeof("SENAO SE\n\t"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1439,7 +1439,7 @@ _ret IF()
 	strncpy_s(analise.cod,"", sizeof(""));
 	if (tk == TKIf)
 	{
-		strncpy_s(analise.cod,"\nse", sizeof("\nse"));
+		strncpy_s(analise.cod,"\nSE ", sizeof("\nSE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1452,7 +1452,7 @@ _ret IF()
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-					strncat_s(analise.cod, sizeof(analise.cod), "\nentao\n\t", sizeof("\nentao\n\t"));
+					strncat_s(analise.cod, sizeof(analise.cod), " ENTAO\n\t", sizeof(" ENTAO\n\t"));
 					leToken();
 					_ret bloco = BLOCO();
 					if (bloco.ret)
@@ -1460,7 +1460,14 @@ _ret IF()
 						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE 2", sizeof("SENAO SE 2"));
+							/*
+							if (tk == TKElseIf) {
+								strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE", sizeof("SENAO SE"));
+							} else {
+								strncat_s(analise.cod, sizeof(analise.cod), "SENAO", sizeof("SENAO"));
+							}
+							*/
+
 							_ret elsee = ELSE();
 							if (!elsee.ret)
 							{
@@ -1472,7 +1479,7 @@ _ret IF()
 						}
 						if (tk == TKEnd)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), "fimse\n", sizeof("fimse\n"));
+							strncat_s(analise.cod, sizeof(analise.cod), "FIMSE\n", sizeof("FIMSE\n"));
 							leToken();
 							analise.ret = 1;
 							return analise;
@@ -2275,7 +2282,13 @@ _ret INICIO()
 		analise.ret = 1;
 //		strcpy(analise.cod, bloco.cod);
 //		strncpy_s(analise.cod,bloco.cod,sizeof(bloco.cod));
-		fprintf(portugues, "%s \n", bloco.cod);
+
+		strncat_s(analise.cod, sizeof(analise.cod), "inicio\n", sizeof("inicio\n"));
+		strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+		strncat_s(analise.cod, sizeof(analise.cod), "fimalgoritmo", sizeof("fimalgoritmo"));
+
+
+		fprintf(portugues, "%s \n", analise.cod);
 		return analise;
 	}
 	else
