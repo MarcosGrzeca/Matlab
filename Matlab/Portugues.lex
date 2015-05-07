@@ -1,8 +1,10 @@
+algoritmo 'compiladores'
+var
 inicio
 
-SE (r==c) ENTAO
-	c=r;
+SE (r=c) ENTAO
+	c<-r;
 SENAO
-	r=c;
+	r<-c;
 FIMSE
 fimalgoritmo 

@@ -105,6 +105,8 @@ FILE * portugues;
 size_t space = 1;
 struct _ret* s_ret;
 
+//int variaveis[];
+
 void escreverStringPort(char string) {
 	fprintf(portugues, "%s \n", string);
 }
@@ -563,14 +565,13 @@ _ret ATRIB()
 		strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
 		if (tk == TKAtrib)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise.cod, sizeof(analise.cod), "<-", sizeof("<-"));
 			leToken();
 			_ret val = VAL();
 			if (val.ret)
 			{
 				analise.ret = 1;
-				//strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
-				//strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));	
 				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
 				return analise;
 			}
@@ -1156,7 +1157,11 @@ _ret COMP5()
 		if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
 			tk == TKIgual || tk == TKDiferente)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			if (tk == TKIgual) {
+				strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));
+			} else {
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			}
 			leToken();
 
 			_ret exp1_1 = EXP1();
@@ -2282,6 +2287,9 @@ _ret INICIO()
 		analise.ret = 1;
 //		strcpy(analise.cod, bloco.cod);
 //		strncpy_s(analise.cod,bloco.cod,sizeof(bloco.cod));
+
+		strncat_s(analise.cod, sizeof(analise.cod), "algoritmo 'compiladores'\n\n", sizeof("algoritmo 'compiladores'\n\n"));
+		strncat_s(analise.cod, sizeof(analise.cod), "var\n", sizeof("var\n"));
 
 		strncat_s(analise.cod, sizeof(analise.cod), "inicio\n", sizeof("inicio\n"));
 		strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
