@@ -2285,16 +2285,11 @@ _ret INICIO()
 	if (bloco.ret)
 	{
 		analise.ret = 1;
-//		strcpy(analise.cod, bloco.cod);
-//		strncpy_s(analise.cod,bloco.cod,sizeof(bloco.cod));
-
 		strncat_s(analise.cod, sizeof(analise.cod), "algoritmo 'compiladores'\n\n", sizeof("algoritmo 'compiladores'\n\n"));
 		strncat_s(analise.cod, sizeof(analise.cod), "var\n", sizeof("var\n"));
-
 		strncat_s(analise.cod, sizeof(analise.cod), "inicio\n", sizeof("inicio\n"));
 		strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 		strncat_s(analise.cod, sizeof(analise.cod), "fimalgoritmo", sizeof("fimalgoritmo"));
-
 
 		fprintf(portugues, "%s \n", analise.cod);
 		return analise;
