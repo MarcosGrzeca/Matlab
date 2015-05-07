@@ -1,2 +1,6 @@
-a=;
-b=SEc= 
+
+se(r==c)
+entao
+	c=r;
+fimse
+ 

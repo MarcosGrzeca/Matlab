@@ -500,11 +500,9 @@ _ret id()
 	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKId)
 	{
-
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
 		analise.ret = 1;
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		return analise;
 	}
 	analise.ret = 0;
@@ -517,41 +515,36 @@ _ret cte()
 	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKConstanteInteira)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		analise.ret = 1;
 		return analise;
 	}
 	if (tk == TKConstanteReal)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		analise.ret = 1;
 		return analise;
 	}
 	if (tk == TKString)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		analise.ret = 1;
 		return analise;
 	}
 	if (tk == TKTrue)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		analise.ret = 1;
 		return analise;
 	}
 	if (tk == TKFalse)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		int indice = posTK - 1;
-		strncpy_s(analise.cod, tokens[indice].elemento, sizeof(tokens[indice].elemento));
 		analise.ret = 1;
 		return analise;
 	}
@@ -567,15 +560,17 @@ _ret ATRIB()
 	_ret ident = id();
 	if (ident.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
 		if (tk == TKAtrib)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
 			_ret val = VAL();
 			if (val.ret)
 			{
 				analise.ret = 1;
-				strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
-				strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));	
+				//strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
+				//strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));	
 				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
 				return analise;
 			}
@@ -590,137 +585,215 @@ _ret ATRIB()
 	return analise;
 }
 
-int EXPFIM()
+_ret EXPFIM()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+
 	if (tk == TKAbrePar)
 	{
+		strncpy_s(analise.cod, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
 		_ret exp1 = EXP1();
 		if (exp1.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
 			if (tk == TKFechaPar)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 				leToken();
-				return 1;
+				analise.ret = 1;
+				return analise;
 			}
 			erroFechaPar();
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
 	int marcaPos = setPos();
-	if (id().ret)
+	_ret ident = id();
+	if (ident.ret)
 	{
-		return 1;
+		strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
+		analise.ret = 1;
+		return analise;
 	}
 	voltaPos(marcaPos);
-	if (cte().ret)
+	_ret cons = cte();
+	if (cons.ret)
 	{
-		return 1;
+		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
+		analise.ret = 1;
+		return analise;
 	}
 	voltaPos(marcaPos);
-	if (FUNCTION().ret)
+	_ret function = FUNCTION();
+	if (function.ret)
 	{
-		return 1;
+		strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP15()
+_ret EXP15()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKSubtracao)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXPFIM())
+		_ret expFim = EXPFIM();
+		if (expFim.ret)
 		{
-			return 1;
+			strncat_s(analise.cod, sizeof(analise.cod), expFim.cod, sizeof(expFim.cod));
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	else if (EXPFIM())
-	{
-		return 1;
+	else {
+		_ret expFim2 = EXPFIM();
+		if (expFim2.ret)
+		{
+			strncat_s(analise.cod, sizeof(analise.cod), expFim2.cod, sizeof(expFim2.cod));
+			analise.ret = 1;
+			return analise;
+		} else {
+			analise.ret = 0;
+			return analise;
+		}
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP14()
+_ret EXP14()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKPotencia)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP15())
+		_ret exp15 = EXP15();
+		if (exp15.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp15.cod, sizeof(exp15.cod));
 			if (tk == TKPotencia)
 			{
-				if (EXP14())
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret exp14 = EXP14();
+				if (exp14.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp14.cod, sizeof(exp14.cod));
+					analise.ret = 1;
+					return analise;
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP13()
+_ret EXP13()
 {
-	if (EXP15())
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+
+	_ret exp15 = EXP15();
+	if (exp15.ret)
 	{
+		strncpy_s(analise.cod,exp15.cod,sizeof(exp15.cod));
 		if (tk == TKPotencia)
 		{
-			if (EXP14())
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret exp14 = EXP14();
+			if (exp14.ret)
 			{
-				return 1;
+				strncpy_s(analise.cod,exp14.cod,sizeof(exp14.cod));
+				analise.ret = 1;
+				return analise;
 			}
-			return 0;
+			analise.ret = 0;
+			return analise;
 		}
-		return 1;
+		analise.ret = 1;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
-int EXP12()
+_ret EXP12()
 {
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+
 	if (tk == TKEBinario)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (EXP13())
+		_ret exp13 = EXP13();
+		if (exp13.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), exp13.cod, sizeof(exp13.cod));
 			if (tk == TKEBinario)
 			{
-				if (EXP12())
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret exp12 = EXP12();
+				if (exp12.ret)
 				{
-					return 1;
+					strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
+					analise.ret = 1;
+					return analise;
+
 				}
-				return 0;
+				analise.ret = 0;
+				return analise;
 			}
-			return 1;
+			analise.ret = 1;
+			return analise;
 		}
 		erroExpInvalida();
-		return 0;
+		analise.ret = 0;
+		return analise;
 	}
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret EXP11()
 {
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
-	if (EXP13())
+	
+	_ret exp13 = EXP13();
+	if (exp13.ret)
 	{
-		//strncat_s(analise.cod, sizeof(analise.cod), exp32.cod, sizeof(exp13.cod));
+		strncat_s(analise.cod, sizeof(analise.cod), exp13.cod, sizeof(exp13.cod));
 		if (tk == TKEBinario)
 		{
 			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			if (EXP12())
+			_ret exp12 = EXP12();
+			if (exp12.ret)
 			{
-				//strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
+				strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1057,7 +1130,7 @@ _ret COMP5()
 	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKAbrePar)
 	{
-		strncpy_s(analise.cod,"(",sizeof(")"));
+		strncpy_s(analise.cod,"(",sizeof("("));
 		leToken();
 		_ret comp0 = COMP0();
 		if (comp0.ret){
@@ -1079,7 +1152,7 @@ _ret COMP5()
 	_ret exp1 = EXP1();
 	if (exp1.ret)
 	{
-		//strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
+		strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
 		if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
 			tk == TKIgual || tk == TKDiferente)
 		{
@@ -1089,7 +1162,7 @@ _ret COMP5()
 			_ret exp1_1 = EXP1();
 			if (exp1_1.ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
+				strncat_s(analise.cod, sizeof(analise.cod), exp1_1.cod, sizeof(exp1_1.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1296,31 +1369,43 @@ _ret ELSE()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKElse)
 	{
-		leToken();
 		strncpy_s(analise.cod, "SENAO", sizeof("SENAO"));
-		if (BLOCO().ret)
+		leToken();
+		_ret bloco = BLOCO();
+		if (bloco.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 			analise.ret = 1;
 			return analise;
 		}
 	}
 	else if (tk == TKElseIf)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE", sizeof("SENAO SE"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (COMP0().ret)
+			_ret comp0 = COMP0();
+			if (comp0.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
 				if (tk == TKFechaPar)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
-					if (BLOCO().ret)
+					_ret bloco = BLOCO();
+					if (bloco.ret)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							if (ELSE().ret)
+							strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE VER", sizeof("SENAO SE VER"));
+							_ret elsee = ELSE();
+							if (elsee.ret)
 							{
+								strncat_s(analise.cod, sizeof(analise.cod), elsee.cod, sizeof(elsee.cod));
 								analise.ret = 1;
 								return analise;
 							}
@@ -1354,28 +1439,40 @@ _ret IF()
 	strncpy_s(analise.cod,"", sizeof(""));
 	if (tk == TKIf)
 	{
-		strncpy_s(analise.cod,"SE", sizeof("SE"));
+		strncpy_s(analise.cod,"\nse", sizeof("\nse"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (COMP0().ret)
+			_ret comp0 = COMP0();
+			if (comp0.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
 				if (tk == TKFechaPar)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise.cod, sizeof(analise.cod), "\nentao\n\t", sizeof("\nentao\n\t"));
 					leToken();
-					if (BLOCO().ret)
+					_ret bloco = BLOCO();
+					if (bloco.ret)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							if (!ELSE().ret)
+							strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE 2", sizeof("SENAO SE 2"));
+							_ret elsee = ELSE();
+							if (!elsee.ret)
 							{
 								analise.ret = 0;
 								return analise;
+							} else {
+								strncat_s(analise.cod, sizeof(analise.cod), elsee.cod, sizeof(elsee.cod));
 							}
 						}
 						if (tk == TKEnd)
 						{
+							strncat_s(analise.cod, sizeof(analise.cod), "fimse\n", sizeof("fimse\n"));
 							leToken();
 							analise.ret = 1;
 							return analise;
@@ -1408,17 +1505,23 @@ _ret TRY()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKTry)
 	{
-		strncpy_s(analise.cod, "TRY", sizeof("TRY"));
+		strncpy_s(analise.cod, "TESTAR ", sizeof("TESTAR"));
 		leToken();
-		if (BLOCO().ret)
+		_ret bloco = BLOCO();
+		if (bloco.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 			if (tk == TKCatch)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), "CATCH E", sizeof("CATCH E"));
 				leToken();
-				if (BLOCO().ret)
+				_ret bloco2 = BLOCO();
+				if (bloco2.ret)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), bloco2.cod, sizeof(bloco2.cod));
 					if (tk == TKEnd)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), "FIM CATCH", sizeof("FIM CATCH"));
 						leToken();
 						analise.ret = 1;
 						return analise;
@@ -1447,13 +1550,19 @@ _ret CRIAFUNCTION()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKFunction)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (FUNCTION().ret)
+		_ret function = FUNCTION();
+		if (function.ret)
 		{
-			if (BLOCO().ret)
+			strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
+			_ret bloco = BLOCO();
+			if (bloco.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 				if (tk == TKEnd)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
 					analise.ret = 1;
 					return analise;
@@ -1472,14 +1581,20 @@ _ret CRIAFUNCTION()
 	return analise;
 }
 
-int PARAM2()
+_ret PARAM2()
 {
-	if (VAL().ret)
+	_ret analise;
+	strncpy_s(analise.cod,"",sizeof(""));
+	_ret val = VAL();
+	if (val.ret)
 	{
-		return 1;
+		strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
+		analise.ret = 1;
+		return analise;
 	}
 	erroVal();
-	return 0;
+	analise.ret = 0;
+	return analise;
 }
 
 _ret PARAM1()
@@ -1488,12 +1603,17 @@ _ret PARAM1()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKVirgula)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (PARAM2())
+		_ret param2 = PARAM2();
+		if (param2.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), param2.cod, sizeof(param2.cod));
 			if (tk == TKVirgula)
 			{
-				if (PARAM1().ret)
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				_ret param1 = PARAM1();
+				if (param1.ret)
 				{
 					analise.ret = 1;
 					return analise;
@@ -1515,12 +1635,17 @@ _ret PARAM0()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (PARAM2())
+	_ret param2 = PARAM2();
+	if (param2.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), param2.cod, sizeof(param2.cod));
 		if (tk == TKVirgula)
 		{
-			if (PARAM1().ret)
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret param1 = PARAM1();
+			if (param1.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), param1.cod, sizeof(param1.cod));	
 				analise.ret = 1;
 				return analise;
 			}
@@ -1538,15 +1663,22 @@ _ret FUNCTION()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (id().ret)
+
+	_ret ident = id();
+	if (ident.ret)
 	{
+		strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
 		if (tk == TKAbrePar)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (PARAM0().ret)
+			_ret param0 = PARAM0();
+			if (param0.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), param0.cod, sizeof(param0.cod));
 				if (tk == TKFechaPar)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
 					analise.ret = 1;
 					return analise;
@@ -1569,23 +1701,33 @@ _ret PARFOR()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (ATRIB().ret)
+	_ret atrib = ATRIB();
+	if (atrib.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), atrib.cod, sizeof(atrib.cod));
 		if (tk == TKDoisPontos)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (VAL().ret)
+			_ret val = VAL();
+			if (val.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
 				if (tk == TKPontoeVirg)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
-					if (BLOCO().ret)
+					_ret bloco = BLOCO();
+					if (bloco.ret)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKPontoeVirg)
 						{
+							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 							leToken();
 							if (tk == TKEnd)
 							{
+								strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 								analise.ret = 1;
 								return analise;
 							}
@@ -1620,13 +1762,18 @@ _ret CASEVALUE2()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (cte().ret)
+	_ret cons = cte();
+	if (cons.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
 		if (tk == TKVirgula)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (CASEVALUE2().ret)
+			_ret casevalue2 = CASEVALUE2();
+			if (casevalue2.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), casevalue2.cod, sizeof(casevalue2.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1644,13 +1791,18 @@ _ret CASEVALUE1()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (cte().ret)
+	_ret cons = cte();
+	if (cons.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
 		if (tk == TKVirgula)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (CASEVALUE2().ret)
+			_ret casevalue2 = CASEVALUE2();
+			if (casevalue2.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), casevalue2.cod, sizeof(casevalue2.cod));
 				analise.ret = 1;
 				return analise;
 			}
@@ -1668,18 +1820,24 @@ _ret CASEVALUE0()
 {
 	_ret analise;
 	strncpy_s(analise.cod, "", sizeof(""));
-	if (cte().ret)
+	_ret cons = cte();
+	if (cons.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	else if (tk == TKAbreChave)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (CASEVALUE1().ret)
+		_ret casevalue1 = CASEVALUE1();
+		if (casevalue1.ret)
 		{
+			strncat_s(analise.cod, sizeof(casevalue1.cod), cons.cod, sizeof(casevalue1.cod));
 			if (tk == TKFechaChave)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 				leToken();
 				analise.ret = 1;
 				return analise;
@@ -1701,15 +1859,23 @@ _ret CASE()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKCase)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (CASEVALUE0().ret)
+		_ret casevalue0 = CASEVALUE0();
+		if (casevalue0.ret)
 		{
-			if (BLOCO().ret)
+			strncat_s(analise.cod, sizeof(analise.cod), casevalue0.cod, sizeof(casevalue0.cod));
+			_ret bloco = BLOCO();
+			if (bloco.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 				if (tk == TKCase || tk == TKOtherwise)
 				{
-					if (CASE().ret)
+					strncat_s(analise.cod, sizeof(analise.cod), "CASE AASAS", sizeof("CASE AASAS"));
+					_ret casee = CASE();
+					if (casee.ret)
 					{
+						strncat_s(analise.cod, sizeof(casee.cod), bloco.cod, sizeof(casee.cod));
 						analise.ret = 1;
 						return analise;
 					}
@@ -1727,9 +1893,12 @@ _ret CASE()
 	}
 	else if (tk == TKOtherwise)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (BLOCO().ret)
+		_ret bloco = BLOCO();
+		if (bloco.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 			analise.ret = 1;
 			return analise;
 		}
@@ -1746,13 +1915,19 @@ _ret SWITCH()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKSwitch)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (id().ret)
+		_ret ident = id();
+		if (ident.ret)
 		{
-			if (CASE().ret)
+			strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
+			_ret casee = CASE();
+			if (casee.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), casee.cod, sizeof(casee.cod));
 				if (tk == TKEnd)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
 					analise.ret = 1;
 					return analise;
@@ -1777,19 +1952,27 @@ _ret WHILE()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKWhile)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), "ENQUANTO", sizeof("ENQUANTO"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			leToken();
-			if (COMP0().ret)
+			_ret comp0 = COMP0();
+			if (comp0.ret)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
 				if (tk == TKFechaPar)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 					leToken();
-					if (BLOCO().ret)
+					_ret bloco = BLOCO();
+					if (bloco.ret)
+						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 					{
 						if (tk == TKEnd)
 						{
+							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 							leToken();
 							analise.ret = 1;
 							return analise;
@@ -1822,28 +2005,41 @@ _ret FOR()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKFor)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), "PARA", sizeof("PARA"));
 		leToken();
-		if (ATRIB().ret)
+		_ret atrib = ATRIB();
+		if (atrib.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), atrib.cod, sizeof(atrib.cod));
 			if (tk == TKDoisPontos)
 			{
+				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 				leToken();
-				if (VAL().ret)
+				_ret val = VAL();
+				if (val.ret)
 				{
+					strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
 					if (tk == TKDoisPontos)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 						leToken();
-						if (!VAL().ret)
+						_ret val2 = VAL();
+						if (!val2.ret)
 						{
 							erroVal();
 							analise.ret = 0;
 							return analise;
+						} else {
+							strncat_s(analise.cod, sizeof(analise.cod), val2.cod, sizeof(val2.cod));
 						}
 					}
-					if (BLOCO().ret)
+					_ret bloco = BLOCO();
+					if (bloco.ret)
 					{
+						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKEnd)
 						{
+							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 							leToken();
 							analise.ret = 1;
 							return analise;
@@ -1875,9 +2071,11 @@ _ret VAL()
 	int marcaPos = setPos();
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
-	if (FUNCTION().ret)
+
+	_ret func = FUNCTION();
+	if (func.ret)
 	{
-		//strncpy_s(analise.cod, bloco.cod,sizeof(bloco.cod));
+		strncpy_s(analise.cod, func.cod,sizeof(func.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1925,20 +2123,26 @@ _ret COMANDO()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (FOR().ret)
+	_ret fora = FOR(); 
+	if (fora.ret)
 	{
+		strncpy_s(analise.cod, fora.cod,sizeof(fora.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (WHILE().ret)
+	_ret whileC = WHILE();
+	if (whileC.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), whileC.cod, sizeof(whileC.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (SWITCH().ret)
+	_ret switchC = SWITCH();
+	if (switchC.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), switchC.cod, sizeof(switchC.cod));
 		analise.ret = 1;
 		return analise;
 	}
@@ -1951,47 +2155,60 @@ _ret COMANDO()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (TRY().ret)
+	_ret tryC = TRY();
+	if (tryC.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tryC.cod, sizeof(tryC.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (PARFOR().ret)
+	_ret parFor = PARFOR();
+	if (parFor.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), parFor.cod, sizeof(parFor.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (CRIAFUNCTION().ret)
+	_ret criaFunction = CRIAFUNCTION();
+	if (criaFunction.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), criaFunction.cod, sizeof(criaFunction.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	if (FUNCTION().ret)
+	_ret function = FUNCTION();
+	if (function.ret)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
 		analise.ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
 	if (tk == TKBreak)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
 		analise.ret = 1;
 		return analise;
 	}
 	else if (tk == TKContinue)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
 		analise.ret = 1;
 		return analise;
 	}
 	else if (tk == TKReturn)
 	{
+		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 		leToken();
-		if (VAL().ret)
+		_ret val = VAL();
+		if (val.ret)
 		{
+			strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
 			analise.ret = 1;
 			return analise;
 		}
@@ -2021,7 +2238,7 @@ _ret BLOCO()
 			tk == TKIf || tk == TKTry || tk == TKParfor || tk == TKFunction ||
 			tk == TKBreak || tk == TKContinue || tk == TKReturn)
 		{
-
+	//		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			_ret bloco = BLOCO();
 			if (bloco.ret)
 			{
