@@ -1,6 +1,15 @@
-a = 10;
-b = 5
-if (r == c)
-	c = r;
+if (fx <= 0)
+    b=x;
+    fb=fx;
+else
+    a=x;
+    fa=fx;
 end
-c = a + b
+
+i = 7;
+for i=1:r
+    k=1;
+    while (i > x && k <n-1)
+    
+    end 
+end

@@ -1,5 +1,7 @@
-if (r == c)
-	c = r;
+if (fx <= 0)
+    b=x;
+    fb=fx;
 else
-	r = c; 
+    a=x;
+    fa=fx;
 end

@@ -105,7 +105,27 @@ FILE * portugues;
 size_t space = 1;
 struct _ret* s_ret;
 
-//int variaveis[];
+char variaveis[100][50];
+int nroVariaveis = 0;
+
+int buscaTS(char *variavel) {
+	int indice;
+
+	for (indice = 0; indice < nroVariaveis; indice++) {
+		if (strcmp(variavel, variaveis[indice]) == 0) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void incluirTS(char *variavel) {
+
+	if (buscaTS(variavel) == 0) {
+		strncpy_s(variaveis[nroVariaveis], variavel,sizeof(variavel));
+		nroVariaveis++;
+	}
+}
 
 void escreverStringPort(char string) {
 	fprintf(portugues, "%s \n", string);
@@ -503,6 +523,7 @@ _ret id()
 	if (tk == TKId)
 	{
 		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		incluirTS(tokens[posTK].elemento);
 		leToken();
 		analise.ret = 1;
 		return analise;
@@ -2287,11 +2308,20 @@ _ret INICIO()
 		analise.ret = 1;
 		strncat_s(analise.cod, sizeof(analise.cod), "algoritmo 'compiladores'\n\n", sizeof("algoritmo 'compiladores'\n\n"));
 		strncat_s(analise.cod, sizeof(analise.cod), "var\n", sizeof("var\n"));
-		strncat_s(analise.cod, sizeof(analise.cod), "inicio\n", sizeof("inicio\n"));
+		int indice;
+		for (indice = 0; indice < nroVariaveis; indice++) {
+			if (indice > 0) {
+				strncat_s(analise.cod, sizeof(analise.cod), ", ", sizeof(", "));
+			}
+			strncat_s(analise.cod, sizeof(analise.cod), variaveis[indice], sizeof(variaveis[indice]));
+		}
+		if (nroVariaveis > 0) {
+			strncat_s(analise.cod, sizeof(analise.cod), " : real\n", sizeof(" : real\n"));
+		}
+		strncat_s(analise.cod, sizeof(analise.cod), "\ninicio\n", sizeof("inicio\n"));
 		strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
-		strncat_s(analise.cod, sizeof(analise.cod), "fimalgoritmo", sizeof("fimalgoritmo"));
-
-		fprintf(portugues, "%s \n", analise.cod);
+		strncat_s(analise.cod, sizeof(analise.cod), "\nfimalgoritmo", sizeof("\nfimalgoritmo"));
+		fprintf(portugues, "%s", analise.cod);
 		return analise;
 	}
 	else
