@@ -1,7 +1,7 @@
 algoritmo 'compiladores'
 
 var
-x, minV, maxV, minV, b, fb, fx, a, fa, i, r, k : real
+x, minVal, maxVal, b, fb, fx, a, fa, i, r, k : real
 
 inicio
 

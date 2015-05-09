@@ -105,10 +105,10 @@ FILE * portugues;
 size_t space = 1;
 struct _ret* s_ret;
 
-char variaveis[100][50];
+char variaveis[100][30];
 int nroVariaveis = 0;
 
-int buscaTS(char *variavel) {
+int buscaTS(char variavel[]) {
 	int indice;
 
 	for (indice = 0; indice < nroVariaveis; indice++) {
@@ -119,10 +119,10 @@ int buscaTS(char *variavel) {
 	return 0;
 }
 
-void incluirTS(char *variavel) {
+void incluirTS(char variavel[]) {
 
 	if (buscaTS(variavel) == 0) {
-		strncpy_s(variaveis[nroVariaveis], variavel,sizeof(variavel));
+		strncpy_s(variaveis[nroVariaveis], variavel,29);
 		nroVariaveis++;
 	}
 }
