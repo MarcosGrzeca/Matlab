@@ -15,5 +15,6 @@ FIMSE
 i<-7;
 PARA i<-1:r
 	k<-1;
-end
+FIMPARA
+
 fimalgoritmo

@@ -1988,7 +1988,7 @@ _ret WHILE()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKWhile)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "ENQUANTO", sizeof("ENQUANTO"));
+		strncat_s(analise.cod, sizeof(analise.cod), "ENQUANTO ", sizeof("ENQUANTO "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -2008,7 +2008,8 @@ _ret WHILE()
 					{
 						if (tk == TKEnd)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							strncat_s(analise.cod, sizeof(analise.cod), "FIMENQUANTO", sizeof("FIMENQUANTO"));
 							leToken();
 							analise.ret = 1;
 							return analise;
@@ -2076,7 +2077,8 @@ _ret FOR()
 						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
 						if (tk == TKEnd)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							strncat_s(analise.cod, sizeof(analise.cod), "FIMPARA\n", sizeof("FIMPARA\n"));
 							leToken();
 							analise.ret = 1;
 							return analise;
