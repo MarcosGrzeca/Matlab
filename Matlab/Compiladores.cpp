@@ -2038,7 +2038,7 @@ _ret FOR()
 	strncpy_s(analise.cod, "", sizeof(""));
 	if (tk == TKFor)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "PARA", sizeof("PARA"));
+		strncat_s(analise.cod, sizeof(analise.cod), "PARA ", sizeof("PARA "));
 		leToken();
 		_ret atrib = ATRIB();
 		if (atrib.ret)
@@ -2052,6 +2052,7 @@ _ret FOR()
 				if (val.ret)
 				{
 					strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
+					strncat_s(analise.cod, sizeof(analise.cod), "\n\t", sizeof("\n\t"));
 					if (tk == TKDoisPontos)
 					{
 						strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
@@ -2271,6 +2272,7 @@ _ret BLOCO()
 			tk == TKIf || tk == TKTry || tk == TKParfor || tk == TKFunction ||
 			tk == TKBreak || tk == TKContinue || tk == TKReturn)
 		{
+
 	//		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			_ret bloco = BLOCO();
 			if (bloco.ret)

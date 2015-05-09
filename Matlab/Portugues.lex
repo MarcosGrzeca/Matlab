@@ -1,7 +1,7 @@
 algoritmo 'compiladores'
 
 var
-fx, b, x, fb, a, fa : real
+fx, b, x, fb, a, fa, i, r, k : real
 
 inicio
 
@@ -12,5 +12,8 @@ SENAO
 	a<-x;
 fa<-fx;
 FIMSE
-
+i<-7;
+PARA i<-1:r
+	k<-1;
+end
 fimalgoritmo
