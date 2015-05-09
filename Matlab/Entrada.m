@@ -1,4 +1,4 @@
-if (fx <= 0)
+if ((x >= minVal) && (x <= maxVal) || (x == minVal))
     b=x;
     fb=fx;
 else

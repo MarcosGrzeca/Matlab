@@ -91,7 +91,7 @@ struct token {
 
 struct _ret{
 	int ret;
-	char cod[200];
+	char cod[300];
 	void *place;
 };
 
@@ -1253,7 +1253,8 @@ _ret COMP3()
 	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKELogico)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+		//strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+		//strncat_s(analise.cod, sizeof(analise.cod), " e ", sizeof(" e "));
 		leToken();
 		_ret comp4 = COMP4();
 		if (comp4.ret)
@@ -1261,7 +1262,7 @@ _ret COMP3()
 			strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, strlen(comp4.cod));
 			if (tk == TKELogico)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+		//		strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
 				_ret comp3 = COMP3();
 				if (comp3.ret)
 				{
@@ -1272,7 +1273,7 @@ _ret COMP3()
 				analise.ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise.ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
@@ -1297,7 +1298,8 @@ _ret COMP2()
 		strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, sizeof(comp4.cod));
 		if (tk == TKELogico)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+			//strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
+			strncat_s(analise.cod, sizeof(analise.cod), " e ", sizeof(" e "));
 			_ret comp3 = COMP3();
 			if (comp3.ret)
 			{
@@ -1324,7 +1326,8 @@ _ret COMP1()
 	strncpy_s(analise.cod,"",sizeof(""));
 	if (tk == TKOuLogico)
 	{
-		strncpy_s(analise.cod,"|",sizeof("|"));
+		//strncpy_s(analise.cod,"|",sizeof("|"));
+		//strncpy_s(analise.cod," ou ",sizeof(" ou "));
 		leToken();
 		_ret comp2 = COMP2();
 		if (comp2.ret)
@@ -1332,7 +1335,7 @@ _ret COMP1()
 			strncat_s(analise.cod, sizeof(analise.cod), comp2.cod, sizeof(comp2.cod));
 			if (tk == TKOuLogico)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
+				//strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
 				_ret comp1 = COMP1();
 				if (comp1.ret)
 				{
@@ -1368,7 +1371,7 @@ _ret COMP0()
 		strncat_s(analise.cod, sizeof(analise.cod), comp2.cod, sizeof(comp2.cod));
 		if (tk == TKOuLogico)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
+			strncat_s(analise.cod, sizeof(analise.cod), " ou ", sizeof(" ou "));
 			_ret comp1 = COMP1();
 			if (comp1.ret)
 			{

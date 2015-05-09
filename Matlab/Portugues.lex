@@ -1,11 +1,11 @@
 algoritmo 'compiladores'
 
 var
-fx, b, x, fb, a, fa, i, r, k : real
+x, minV, maxV, minV, b, fb, fx, a, fa, i, r, k : real
 
 inicio
 
-SE (fx<=0) ENTAO
+SE ((x>=minVal) e (x<=maxVal) ou (x=minVal)) ENTAO
 	b<-x;
 fb<-fx;
 SENAO
