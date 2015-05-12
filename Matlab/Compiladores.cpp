@@ -1202,7 +1202,9 @@ _ret *COMP5()
 			tk == TKIgual || tk == TKDiferente)
 		{
 			if (tk == TKIgual) {
-				strncat_s(analise->cod, 1000, "=", strlen("="));
+				strncat_s(analise->cod, 1000, " = ", strlen(" = "));
+			} else	if (tk == TKDiferente) {
+				strncat_s(analise->cod, 1000, " <> ", strlen(" <> "));
 			} else {
 				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			}
