@@ -2332,7 +2332,7 @@ _ret *BLOCO()
 			_ret *bloco = BLOCO();
 			if (bloco->ret)
 			{
-				strncat_s(analise_bl->cod, 1000, bloco->cod, strlen(bloco->cod));
+				strncat_s(analise_bl->cod, strlen(analise_bl->cod)+strlen(bloco->cod)+2, bloco->cod, strlen(bloco->cod));
 				analise_bl->ret = 1;
 				return analise_bl;
 			}
@@ -2366,8 +2366,8 @@ _ret *INICIO()
 	//strncpy_s(analise->cod,1000, "", sizeof(""));
 	//analise->cod = (char *)malloc(sizeof(char) * 1000);
 	// analise = (_ret *)malloc(sizeof(_ret));
-	analise->cod = (char *)malloc(sizeof(char) * 1000);
-	strncpy_s(analise->cod, 1000, "", strlen(""));
+	analise->cod = (char *)malloc(sizeof(char) * 4000);
+	strncpy_s(analise->cod, 4000, "", strlen(""));
 		//necessário para strncat (strncat não concatena strings sem possuir terminador nulo \0
 		//ou strncpy_s ou string[strlen(string)] = '\0'; porém a última alternativa resulta em duas strings gigantes contactenadas
 	
