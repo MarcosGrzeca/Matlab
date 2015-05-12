@@ -91,7 +91,8 @@ struct token {
 
 struct _ret{
 	int ret;
-	char cod[300];
+	//char cod[1000];
+	char *cod;
 	void *place;
 };
 
@@ -509,1768 +510,1813 @@ int setPos()
 	return posTK;
 }
 
-_ret EXP0();
-_ret FUNCTION();
-_ret EXP1();
-_ret COMP0();
-_ret BLOCO();
-_ret VAL();
+_ret *EXP0();
+_ret *FUNCTION();
+_ret *EXP1();
+_ret *COMP0();
+_ret *BLOCO();
+_ret *VAL();
 
-_ret id()
+_ret *id()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKId)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod,1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		incluirTS(tokens[posTK].elemento);
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret cte()
+_ret *cte()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod,1000, "", strlen(""));
 	if (tk == TKConstanteInteira)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	if (tk == TKConstanteReal)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	if (tk == TKString)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	if (tk == TKTrue)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	if (tk == TKFalse)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret ATRIB()
+_ret *ATRIB()
 {
 
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret ident = id();
-	if (ident.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *ident = id();
+	if (ident->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
+		strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
 		if (tk == TKAtrib)
 		{
-			//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			strncat_s(analise.cod, sizeof(analise.cod), "<-", sizeof("<-"));
+			//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, "<-", strlen("<-"));
 			leToken();
-			_ret val = VAL();
-			if (val.ret)
+			_ret *val = VAL();
+			if (val->ret)
 			{
-				analise.ret = 1;
-				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
+				analise->ret = 1;
+				strncat_s(analise->cod, 1000, val->cod, strlen(val->cod));
 				return analise;
 			}
 			erroVal();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXPFIM()
+_ret *EXPFIM()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 
 	if (tk == TKAbrePar)
 	{
-		strncpy_s(analise.cod, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncpy_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp1 = EXP1();
-		if (exp1.ret)
+		_ret *exp1 = EXP1();
+		if (exp1->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
+			strncat_s(analise->cod, 1000, exp1->cod, strlen(exp1->cod));
 			if (tk == TKFechaPar)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 				leToken();
-				analise.ret = 1;
+				analise->ret = 1;
 				return analise;
 			}
 			erroFechaPar();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 	int marcaPos = setPos();
-	_ret ident = id();
-	if (ident.ret)
+	_ret *ident = id();
+	if (ident->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret cons = cte();
-	if (cons.ret)
+	_ret *cons = cte();
+	if (cons->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, cons->cod, strlen(cons->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret function = FUNCTION();
-	if (function.ret)
+	_ret *function = FUNCTION();
+	if (function->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, function->cod, strlen(function->cod));
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP15()
+_ret *EXP15()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSubtracao)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret expFim = EXPFIM();
-		if (expFim.ret)
+		_ret *expFim = EXPFIM();
+		if (expFim->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), expFim.cod, sizeof(expFim.cod));
-			analise.ret = 1;
+			strncat_s(analise->cod, 1000, expFim->cod, strlen(expFim->cod));
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 	else {
-		_ret expFim2 = EXPFIM();
-		if (expFim2.ret)
+		_ret *expFim2 = EXPFIM();
+		if (expFim2->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), expFim2.cod, sizeof(expFim2.cod));
-			analise.ret = 1;
+			strncat_s(analise->cod, 1000, expFim2->cod, strlen(expFim2->cod));
+			analise->ret = 1;
 			return analise;
 		} else {
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP14()
+_ret *EXP14()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKPotencia)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp15 = EXP15();
-		if (exp15.ret)
+		_ret *exp15 = EXP15();
+		if (exp15->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp15.cod, sizeof(exp15.cod));
+			strncat_s(analise->cod, 1000, exp15->cod, strlen(exp15->cod));
 			if (tk == TKPotencia)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret exp14 = EXP14();
-				if (exp14.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *exp14 = EXP14();
+				if (exp14->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp14.cod, sizeof(exp14.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp14->cod, strlen(exp14->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP13()
+_ret *EXP13()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 
-	_ret exp15 = EXP15();
-	if (exp15.ret)
+	_ret *exp15 = EXP15();
+	if (exp15->ret)
 	{
-		strncpy_s(analise.cod,exp15.cod,sizeof(exp15.cod));
+		strncpy_s(analise->cod, 1000, exp15->cod, strlen(exp15->cod));
 		if (tk == TKPotencia)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp14 = EXP14();
-			if (exp14.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp14 = EXP14();
+			if (exp14->ret)
 			{
-				strncpy_s(analise.cod,exp14.cod,sizeof(exp14.cod));
-				analise.ret = 1;
+				strncpy_s(analise->cod, 1000, exp14->cod, strlen(exp14->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP12()
+_ret *EXP12()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 
 	if (tk == TKEBinario)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp13 = EXP13();
-		if (exp13.ret)
+		_ret *exp13 = EXP13();
+		if (exp13->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp13.cod, sizeof(exp13.cod));
+			strncat_s(analise->cod, 1000, exp13->cod, strlen(exp13->cod));
 			if (tk == TKEBinario)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret exp12 = EXP12();
-				if (exp12.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *exp12 = EXP12();
+				if (exp12->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp12->cod, strlen(exp12->cod));
+					analise->ret = 1;
 					return analise;
 
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP11()
+_ret *EXP11()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	
-	_ret exp13 = EXP13();
-	if (exp13.ret)
+	_ret *exp13 = EXP13();
+	if (exp13->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp13.cod, sizeof(exp13.cod));
+		strncat_s(analise->cod, 1000, exp13->cod, strlen(exp13->cod));
 		if (tk == TKEBinario)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp12 = EXP12();
-			if (exp12.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp12 = EXP12();
+			if (exp12->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp12.cod, sizeof(exp12.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp12->cod, strlen(exp12->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP10()
+_ret *EXP10()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKDivisao)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp11 = EXP11();
-		if (exp11.ret)
+		_ret *exp11 = EXP11();
+		if (exp11->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
+			strncat_s(analise->cod, 1000, exp11->cod, strlen(exp11->cod));
 			if (tk == TKDivisao)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret exp10 = EXP10();
-				if (exp10.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *exp10 = EXP10();
+				if (exp10->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp10->cod, strlen(exp10->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP9()
+_ret *EXP9()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret exp11 = EXP11();
-	if (exp11.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *exp11 = EXP11();
+	if (exp11->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp11.cod, sizeof(exp11.cod));
+		strncat_s(analise->cod, 1000, exp11->cod, strlen(exp11->cod));
 		if (tk == TKDivisao)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp10 = EXP10();
-			if (exp10.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp10 = EXP10();
+			if (exp10->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp10.cod, sizeof(exp10.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp10->cod, strlen(exp10->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP8()
+_ret *EXP8()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKMultiplicacao)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp9 = EXP9();
-		if (exp9.ret)
+		_ret *exp9 = EXP9();
+		if (exp9->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp9.cod, sizeof(exp9.cod));
+			strncat_s(analise->cod, 1000, exp9->cod, strlen(exp9->cod));
 			if (tk == TKMultiplicacao)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret exp8 = EXP8();
-				if (exp8.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *exp8 = EXP8();
+				if (exp8->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp8.cod, sizeof(exp8.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp8->cod, strlen(exp8->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP7()
+_ret *EXP7()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret exp9 = EXP9();
-	if (exp9.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *exp9 = EXP9();
+	if (exp9->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp9.cod, sizeof(exp9.cod));
+		strncat_s(analise->cod, 1000, exp9->cod, strlen(exp9->cod));
 		if (tk == TKMultiplicacao)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp8 = EXP8();
-			if (exp8.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp8 = EXP8();
+			if (exp8->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp8.cod, sizeof(exp8.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp8->cod, strlen(exp8->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP6()
+_ret *EXP6()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKOuBinario)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp7 = EXP7();
-		if (exp7.ret)
+		_ret *exp7 = EXP7();
+		if (exp7->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp7.cod, sizeof(exp7.cod));
+			strncat_s(analise->cod, 1000, exp7->cod, strlen(exp7->cod));
 			if (tk == TKOuBinario)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret exp6 = EXP6();
-				if (exp6.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *exp6 = EXP6();
+				if (exp6->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp6.cod, sizeof(exp6.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp6->cod, strlen(exp6->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP5()
+_ret *EXP5()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret exp7 = EXP7();
-	if (exp7.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *exp7 = EXP7();
+	if (exp7->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp7.cod, sizeof(exp7.cod));
+		strncat_s(analise->cod, 1000, exp7->cod, strlen(exp7->cod));
 		if (tk == TKOuBinario)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp6 = EXP6();
-			if (exp6.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp6 = EXP6();
+			if (exp6->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp6.cod, sizeof(exp6.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp6->cod, strlen(exp6->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP4()
+_ret *EXP4()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSubtracao)
 	{
-		strncpy_s(analise.cod, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncpy_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret exp5 = EXP5();
-		if (exp5.ret)
+		_ret *exp5 = EXP5();
+		if (exp5->ret)
 		{
 			if (tk == TKSubtracao)
 			{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret exp4 = EXP4();
-				if (exp4.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *exp4 = EXP4();
+				if (exp4->ret)
 				{
-					analise.ret = 1;
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP3()
+_ret *EXP3()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret exp5 = EXP5();
-	if (exp5.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *exp5 = EXP5();
+	if (exp5->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp5.cod, sizeof(exp5.cod));
+		strncat_s(analise->cod, 1000, exp5->cod, strlen(exp5->cod));
 		if (tk == TKSubtracao)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), "-", sizeof("-"));
-			_ret exp4 = EXP4();
-			if (exp4.ret)
+			strncat_s(analise->cod, 1000, "-", strlen("-"));
+			_ret *exp4 = EXP4();
+			if (exp4->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp4.cod, sizeof(exp4.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp4->cod, strlen(exp4->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP2()
+_ret *EXP2()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSoma)
 	{
 		leToken();
-		_ret exp3 = EXP3();
-		if (exp3.ret)
+		_ret *exp3 = EXP3();
+		if (exp3->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), exp3.cod, sizeof(exp3.cod));
+			strncat_s(analise->cod, 1000, exp3->cod, strlen(exp3->cod));
 			if (tk == TKSoma)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), "+", sizeof("+"));
-				_ret exp2 = EXP2();
-				if (exp2.ret)
+				strncat_s(analise->cod, 1000, "+", strlen("+"));
+				_ret *exp2 = EXP2();
+				if (exp2->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), exp2.cod, sizeof(exp2.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, exp2->cod, strlen(exp2->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret EXP1()
+_ret *EXP1()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret exp3 = EXP3(); 
-	if (exp3.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *exp3 = EXP3(); 
+	if (exp3->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp3.cod, sizeof(exp3.cod));
+		strncat_s(analise->cod, 1000, exp3->cod, strlen(exp3->cod));
 		if (tk == TKSoma)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), "+", sizeof("+"));
-			_ret exp2 = EXP2();
-			if (exp2.ret)
+			strncat_s(analise->cod, 1000, "+", strlen("+"));
+			_ret *exp2 = EXP2();
+			if (exp2->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp2.cod, sizeof(exp2.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp2->cod, strlen(exp2->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret COMP5()
+_ret *COMP5()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKAbrePar)
 	{
-		strncpy_s(analise.cod,"(",sizeof("("));
+		strncpy_s(analise->cod, 1000, "(", strlen("("));
 		leToken();
-		_ret comp0 = COMP0();
-		if (comp0.ret){
-			strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
+		_ret *comp0 = COMP0();
+		if (comp0->ret){
+			strncat_s(analise->cod, 1000, comp0->cod, strlen(comp0->cod));
 			if (tk == TKFechaPar)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), ")", sizeof(")"));
+				strncat_s(analise->cod, 1000, ")", strlen(")"));
 				leToken();
-				analise.ret = 1;
+				analise->ret = 1;
 				return analise;
 			}
 			erroFechaPar();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	_ret exp1 = EXP1();
-	if (exp1.ret)
+	_ret *exp1 = EXP1();
+	if (exp1->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), exp1.cod, sizeof(exp1.cod));
+		strncat_s(analise->cod, 1000, exp1->cod, strlen(exp1->cod));
 		if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
 			tk == TKIgual || tk == TKDiferente)
 		{
 			if (tk == TKIgual) {
-				strncat_s(analise.cod, sizeof(analise.cod), "=", sizeof("="));
+				strncat_s(analise->cod, 1000, "=", strlen("="));
 			} else {
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			}
 			leToken();
 
-			_ret exp1_1 = EXP1();
-			if (exp1_1.ret)
+			_ret *exp1_1 = EXP1();
+			if (exp1_1->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), exp1_1.cod, sizeof(exp1_1.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, exp1_1->cod, strlen(exp1_1->cod));
+				analise->ret = 1;
 				return analise;
 			}
 			erroExpInvalida();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret COMP4()
+_ret *COMP4()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKNegacao)
 	{
-		strncpy_s(analise.cod,"-",sizeof("-"));
+		strncpy_s(analise->cod, 1000, "-", strlen("-"));
 		leToken();
-		_ret comp5 = COMP5();
-		if (comp5.ret)
+		_ret *comp5 = COMP5();
+		if (comp5->ret)
 		{
-			analise.ret = 1;
-			strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
+			analise->ret = 1;
+			strncat_s(analise->cod, 1000, comp5->cod, strlen(comp5->cod));
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	} else {
-		_ret comp5 = COMP5();
-		if (comp5.ret) {
-			strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
-			analise.ret = 1;
+		_ret *comp5 = COMP5();
+		if (comp5->ret) {
+			strncat_s(analise->cod, 1000, comp5->cod, strlen(comp5->cod));
+			analise->ret = 1;
 			return analise;
 		}
 		else
 		{
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
 	}
 	/*else if (COMP5())
 	{
-		//strncat_s(analise.cod, sizeof(analise.cod), comp5.cod, sizeof(comp5.cod));
-		analise.ret = 1;
+		//strncat_s(analise->cod,1000, comp5->cod, sizeof(comp5->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}*/
 }
 
-_ret COMP3()
+_ret *COMP3()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKELogico)
 	{
-		//strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
-		//strncat_s(analise.cod, sizeof(analise.cod), " e ", sizeof(" e "));
+		//strncat_s(analise->cod,1000, "&", sizeof("&"));
+		//strncat_s(analise->cod,1000, " e ", sizeof(" e "));
 		leToken();
-		_ret comp4 = COMP4();
-		if (comp4.ret)
+		_ret *comp4 = COMP4();
+		if (comp4->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, strlen(comp4.cod));
+			strncat_s(analise->cod,1000, comp4->cod, strlen(comp4->cod));
 			if (tk == TKELogico)
 			{
-		//		strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
-				_ret comp3 = COMP3();
-				if (comp3.ret)
+		//		strncat_s(analise->cod,1000, "&", sizeof("&"));
+				_ret *comp3 = COMP3();
+				if (comp3->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), comp3.cod, sizeof(comp3.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, comp3->cod, strlen(comp3->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;		
 	}
 }
 
-_ret COMP2()
+_ret *COMP2()
 {
 
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret comp4 = COMP4();
-	if (comp4.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *comp4 = COMP4();
+	if (comp4->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), comp4.cod, sizeof(comp4.cod));
+		strncat_s(analise->cod, 1000, comp4->cod, strlen(comp4->cod));
 		if (tk == TKELogico)
 		{
-			//strncat_s(analise.cod, sizeof(analise.cod), "&", sizeof("&"));
-			strncat_s(analise.cod, sizeof(analise.cod), " e ", sizeof(" e "));
-			_ret comp3 = COMP3();
-			if (comp3.ret)
+			//strncat_s(analise->cod,1000, "&", sizeof("&"));
+			strncat_s(analise->cod, 1000, " e ", strlen(" e "));
+			_ret *comp3 = COMP3();
+			if (comp3->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), comp3.cod, sizeof(comp3.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, comp3->cod, strlen(comp3->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 }
 
-_ret COMP1()
+_ret *COMP1()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKOuLogico)
 	{
-		//strncpy_s(analise.cod,"|",sizeof("|"));
-		//strncpy_s(analise.cod," ou ",sizeof(" ou "));
+		//strncpy_s(analise->cod,1000,"|",sizeof("|"));
+		//strncpy_s(analise->cod,1000," ou ",sizeof(" ou "));
 		leToken();
-		_ret comp2 = COMP2();
-		if (comp2.ret)
+		_ret *comp2 = COMP2();
+		if (comp2->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), comp2.cod, sizeof(comp2.cod));
+			strncat_s(analise->cod, 1000, comp2->cod, strlen(comp2->cod));
 			if (tk == TKOuLogico)
 			{
-				//strncat_s(analise.cod, sizeof(analise.cod), "|", sizeof("|"));
-				_ret comp1 = COMP1();
-				if (comp1.ret)
+				//strncat_s(analise->cod,1000, "|", sizeof("|"));
+				_ret *comp1 = COMP1();
+				if (comp1->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), comp1.cod, sizeof(comp1.cod));
-					analise.ret = 1;
+					strncat_s(analise->cod, 1000, comp1->cod, strlen(comp1->cod));
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
 		erroExpInvalida();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 }
 
-_ret COMP0()
+_ret *COMP0()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret comp2 = COMP2();
-	if (comp2.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *comp2 = COMP2();
+	if (comp2->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), comp2.cod, sizeof(comp2.cod));
+		strncat_s(analise->cod, 1000, comp2->cod, strlen(comp2->cod));
 		if (tk == TKOuLogico)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), " ou ", sizeof(" ou "));
-			_ret comp1 = COMP1();
-			if (comp1.ret)
+			strncat_s(analise->cod, 1000, " ou ", strlen(" ou "));
+			_ret *comp1 = COMP1();
+			if (comp1->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), comp1.cod, sizeof(comp1.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, comp1->cod, strlen(comp1->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 }
 
-_ret ELSE()
+_ret *ELSE()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKElse)
 	{
-		strncpy_s(analise.cod, "SENAO\n\t", sizeof("SENAO\n\t"));
+		strncpy_s(analise->cod, 1000, "SENAO\n\t", strlen("SENAO\n\t"));
 		leToken();
-		_ret bloco = BLOCO();
-		if (bloco.ret)
+		_ret *bloco = BLOCO();
+		if (bloco->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
-			analise.ret = 1;
+			strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
+			analise->ret = 1;
 			return analise;
 		}
 	}
 	else if (tk == TKElseIf)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE\n\t", sizeof("SENAO SE\n\t"));
+		strncat_s(analise->cod, 1000, "SENAO SE\n\t", strlen("SENAO SE\n\t"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret comp0 = COMP0();
-			if (comp0.ret)
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
+				strncat_s(analise->cod, 1000, comp0->cod, strlen(comp0->cod));
 				if (tk == TKFechaPar)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					_ret bloco = BLOCO();
-					if (bloco.ret)
+					_ret *bloco = BLOCO();
+					if (bloco->ret)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE VER", sizeof("SENAO SE VER"));
-							_ret elsee = ELSE();
-							if (elsee.ret)
+							strncat_s(analise->cod, 1000, "SENAO SE VER", strlen("SENAO SE VER"));
+							_ret *elsee = ELSE();
+							if (elsee->ret)
 							{
-								strncat_s(analise.cod, sizeof(analise.cod), elsee.cod, sizeof(elsee.cod));
-								analise.ret = 1;
+								strncat_s(analise->cod, 1000, elsee->cod, strlen(elsee->cod));
+								analise->ret = 1;
 								return analise;
 							}
-							analise.ret = 0;
+							analise->ret = 0;
 							return analise;
 						}
-						analise.ret = 1;
+						analise->ret = 1;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
 				erroFechaPar();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
 			erroAbrePar();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret IF()
+_ret *IF()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKIf)
 	{
-		strncpy_s(analise.cod,"\nSE ", sizeof("\nSE "));
+		strncpy_s(analise->cod, 1000, "\nSE ", strlen("\nSE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret comp0 = COMP0();
-			if (comp0.ret)
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
+				strncat_s(analise->cod, 1000, comp0->cod, strlen(comp0->cod));
 				if (tk == TKFechaPar)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-					strncat_s(analise.cod, sizeof(analise.cod), " ENTAO\n\t", sizeof(" ENTAO\n\t"));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, " ENTAO\n\t", strlen(" ENTAO\n\t"));
 					leToken();
-					_ret bloco = BLOCO();
-					if (bloco.ret)
+					_ret *bloco = BLOCO();
+					if (bloco->ret)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
 							/*
 							if (tk == TKElseIf) {
-								strncat_s(analise.cod, sizeof(analise.cod), "SENAO SE", sizeof("SENAO SE"));
+								strncat_s(analise->cod,1000, "SENAO SE", sizeof("SENAO SE"));
 							} else {
-								strncat_s(analise.cod, sizeof(analise.cod), "SENAO", sizeof("SENAO"));
+								strncat_s(analise->cod,1000, "SENAO", sizeof("SENAO"));
 							}
 							*/
 
-							_ret elsee = ELSE();
-							if (!elsee.ret)
+							_ret *elsee = ELSE();
+							if (!elsee->ret)
 							{
-								analise.ret = 0;
+								analise->ret = 0;
 								return analise;
 							} else {
-								strncat_s(analise.cod, sizeof(analise.cod), elsee.cod, sizeof(elsee.cod));
+								strncat_s(analise->cod, 1000, elsee->cod, strlen(elsee->cod));
 							}
 						}
 						if (tk == TKEnd)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), "FIMSE\n", sizeof("FIMSE\n"));
+							strncat_s(analise->cod, 1000, "FIMSE\n", strlen("FIMSE\n"));
 							leToken();
-							analise.ret = 1;
+							analise->ret = 1;
 							return analise;
 						}
 						erroEnd();
-						analise.ret = 0;
+						analise->ret = 0;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
 				erroFechaPar();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
 		erroAbrePar();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret TRY()
+_ret *TRY()
 {	
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKTry)
 	{
-		strncpy_s(analise.cod, "TESTAR ", sizeof("TESTAR"));
+		strncpy_s(analise->cod, 1000, "TESTAR ", strlen("TESTAR"));
 		leToken();
-		_ret bloco = BLOCO();
-		if (bloco.ret)
+		_ret *bloco = BLOCO();
+		if (bloco->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+			strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 			if (tk == TKCatch)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), "CATCH E", sizeof("CATCH E"));
+				strncat_s(analise->cod, 1000, "CATCH E", strlen("CATCH E"));
 				leToken();
-				_ret bloco2 = BLOCO();
-				if (bloco2.ret)
+				_ret *bloco2 = BLOCO();
+				if (bloco2->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), bloco2.cod, sizeof(bloco2.cod));
+					strncat_s(analise->cod, 1000, bloco2->cod, strlen(bloco2->cod));
 					if (tk == TKEnd)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), "FIM CATCH", sizeof("FIM CATCH"));
+						strncat_s(analise->cod, 1000, "FIM CATCH", strlen("FIM CATCH"));
 						leToken();
-						analise.ret = 1;
+						analise->ret = 1;
 						return analise;
 					}
 					erroEnd();
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
 			msgErro("CATCH faltando!");
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret CRIAFUNCTION()
+_ret *CRIAFUNCTION()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKFunction)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret function = FUNCTION();
-		if (function.ret)
+		_ret *function = FUNCTION();
+		if (function->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
-			_ret bloco = BLOCO();
-			if (bloco.ret)
+			strncat_s(analise->cod, 1000, function->cod, strlen(function->cod));
+			_ret *bloco = BLOCO();
+			if (bloco->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+				strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 				if (tk == TKEnd)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					analise.ret = 1;
+					analise->ret = 1;
 					return analise;
 				}
 				erroEnd();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret PARAM2()
+_ret *PARAM2()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret val = VAL();
-	if (val.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *val = VAL();
+	if (val->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, val->cod, strlen(val->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	erroVal();
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret PARAM1()
+_ret *PARAM1()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKVirgula)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret param2 = PARAM2();
-		if (param2.ret)
+		_ret *param2 = PARAM2();
+		if (param2->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), param2.cod, sizeof(param2.cod));
+			strncat_s(analise->cod, 1000, param2->cod, strlen(param2->cod));
 			if (tk == TKVirgula)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-				_ret param1 = PARAM1();
-				if (param1.ret)
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *param1 = PARAM1();
+				if (param1->ret)
 				{
-					analise.ret = 1;
+					analise->ret = 1;
 					return analise;
 				}
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 1;
+			analise->ret = 1;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret PARAM0()
+_ret *PARAM0()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
-	_ret param2 = PARAM2();
-	if (param2.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *param2 = PARAM2();
+	if (param2->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), param2.cod, sizeof(param2.cod));
+		strncat_s(analise->cod, 1000, param2->cod, strlen(param2->cod));
 		if (tk == TKVirgula)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret param1 = PARAM1();
-			if (param1.ret)
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			_ret *param1 = PARAM1();
+			if (param1->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), param1.cod, sizeof(param1.cod));	
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, param1->cod, strlen(param1->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret FUNCTION()
+_ret *FUNCTION()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 
-	_ret ident = id();
-	if (ident.ret)
+	_ret *ident = id();
+	if (ident->ret)
 	{
-		strncpy_s(analise.cod, ident.cod, sizeof(ident.cod));
+		strncpy_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
 		if (tk == TKAbrePar)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret param0 = PARAM0();
-			if (param0.ret)
+			_ret *param0 = PARAM0();
+			if (param0->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), param0.cod, sizeof(param0.cod));
+				strncat_s(analise->cod, 1000, param0->cod, strlen(param0->cod));
 				if (tk == TKFechaPar)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					analise.ret = 1;
+					analise->ret = 1;
 					return analise;
 				}
 				erroFechaPar();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret PARFOR()
+_ret *PARFOR()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
-	_ret atrib = ATRIB();
-	if (atrib.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *atrib = ATRIB();
+	if (atrib->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), atrib.cod, sizeof(atrib.cod));
+		strncat_s(analise->cod, 1000, atrib->cod, strlen(atrib->cod));
 		if (tk == TKDoisPontos)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret val = VAL();
-			if (val.ret)
+			_ret *val = VAL();
+			if (val->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
+				strncat_s(analise->cod, 1000, val->cod, strlen(val->cod));
 				if (tk == TKPontoeVirg)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					_ret bloco = BLOCO();
-					if (bloco.ret)
+					_ret *bloco = BLOCO();
+					if (bloco->ret)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 						if (tk == TKPontoeVirg)
 						{
-							strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 							leToken();
 							if (tk == TKEnd)
 							{
-								strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-								analise.ret = 1;
+								strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+								analise->ret = 1;
 								return analise;
 							}
 							erroEnd();
-							analise.ret = 0;
+							analise->ret = 0;
 							return analise;
 						}
 						msgErro("Ponto e virgula esperado");
-						analise.ret = 0;
+						analise->ret = 0;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
 				msgErro("Ponto e virgula esperado");
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
 			erroVal();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
 		erroDoisPt();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret CASEVALUE2()
+_ret *CASEVALUE2()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
-	_ret cons = cte();
-	if (cons.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *cons = cte();
+	if (cons->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
+		strncat_s(analise->cod, 1000, cons->cod, strlen(cons->cod));
 		if (tk == TKVirgula)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret casevalue2 = CASEVALUE2();
-			if (casevalue2.ret)
+			_ret *casevalue2 = CASEVALUE2();
+			if (casevalue2->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), casevalue2.cod, sizeof(casevalue2.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, casevalue2->cod, strlen(casevalue2->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret CASEVALUE1()
+_ret *CASEVALUE1()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
-	_ret cons = cte();
-	if (cons.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *cons = cte();
+	if (cons->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
+		strncat_s(analise->cod, 1000, cons->cod, strlen(cons->cod));
 		if (tk == TKVirgula)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret casevalue2 = CASEVALUE2();
-			if (casevalue2.ret)
+			_ret *casevalue2 = CASEVALUE2();
+			if (casevalue2->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), casevalue2.cod, sizeof(casevalue2.cod));
-				analise.ret = 1;
+				strncat_s(analise->cod, 1000, casevalue2->cod, strlen(casevalue2->cod));
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret CASEVALUE0()
+_ret *CASEVALUE0()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
-	_ret cons = cte();
-	if (cons.ret)
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
+	_ret *cons = cte();
+	if (cons->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), cons.cod, sizeof(cons.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, cons->cod, strlen(cons->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	else if (tk == TKAbreChave)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret casevalue1 = CASEVALUE1();
-		if (casevalue1.ret)
+		_ret *casevalue1 = CASEVALUE1();
+		if (casevalue1->ret)
 		{
-			strncat_s(analise.cod, sizeof(casevalue1.cod), cons.cod, sizeof(casevalue1.cod));
+			strncat_s(analise->cod, 1000, cons->cod, strlen(casevalue1->cod));
 			if (tk == TKFechaChave)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 				leToken();
-				analise.ret = 1;
+				analise->ret = 1;
 				return analise;
 			}
 			msgErro("Falta fechar as chaves");
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret CASE()
+_ret *CASE()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKCase)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret casevalue0 = CASEVALUE0();
-		if (casevalue0.ret)
+		_ret *casevalue0 = CASEVALUE0();
+		if (casevalue0->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), casevalue0.cod, sizeof(casevalue0.cod));
-			_ret bloco = BLOCO();
-			if (bloco.ret)
+			strncat_s(analise->cod, 1000, casevalue0->cod, strlen(casevalue0->cod));
+			_ret *bloco = BLOCO();
+			if (bloco->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+				strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 				if (tk == TKCase || tk == TKOtherwise)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), "CASE AASAS", sizeof("CASE AASAS"));
-					_ret casee = CASE();
-					if (casee.ret)
+					strncat_s(analise->cod, 1000, "CASE AASAS", strlen("CASE AASAS"));
+					_ret *casee = CASE();
+					if (casee->ret)
 					{
-						strncat_s(analise.cod, sizeof(casee.cod), bloco.cod, sizeof(casee.cod));
-						analise.ret = 1;
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(casee->cod));
+						analise->ret = 1;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
-				analise.ret = 1;
+				analise->ret = 1;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 	else if (tk == TKOtherwise)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret bloco = BLOCO();
-		if (bloco.ret)
+		_ret *bloco = BLOCO();
+		if (bloco->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
-			analise.ret = 1;
+			strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
+			analise->ret = 1;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret SWITCH()
+_ret *SWITCH()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSwitch)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret ident = id();
-		if (ident.ret)
+		_ret *ident = id();
+		if (ident->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), ident.cod, sizeof(ident.cod));
-			_ret casee = CASE();
-			if (casee.ret)
+			strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
+			_ret *casee = CASE();
+			if (casee->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), casee.cod, sizeof(casee.cod));
+				strncat_s(analise->cod, 1000, casee->cod, strlen(casee->cod));
 				if (tk == TKEnd)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					analise.ret = 1;
+					analise->ret = 1;
 					return analise;
 				}
 				erroEnd();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret WHILE()
+_ret *WHILE()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKWhile)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "ENQUANTO ", sizeof("ENQUANTO "));
+		strncat_s(analise->cod, 1000, "ENQUANTO ", strlen("ENQUANTO "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			leToken();
-			_ret comp0 = COMP0();
-			if (comp0.ret)
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), comp0.cod, sizeof(comp0.cod));
+				strncat_s(analise->cod, 1000, comp0->cod, strlen(comp0->cod));
 				if (tk == TKFechaPar)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+					strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					_ret bloco = BLOCO();
-					if (bloco.ret)
-						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+					_ret *bloco = BLOCO();
+					if (bloco->ret)
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 					{
 						if (tk == TKEnd)
 						{
-							//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-							strncat_s(analise.cod, sizeof(analise.cod), "FIMENQUANTO", sizeof("FIMENQUANTO"));
+							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							strncat_s(analise->cod, 1000, "FIMENQUANTO", strlen("FIMENQUANTO"));
 							leToken();
-							analise.ret = 1;
+							analise->ret = 1;
 							return analise;
 						}
 						erroEnd();
-						analise.ret = 0;
+						analise->ret = 0;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
 				erroFechaPar();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
 		erroAbrePar();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret FOR()
+_ret *FOR()
 {
-	_ret analise;
-	strncpy_s(analise.cod, "", sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKFor)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), "PARA ", sizeof("PARA "));
+		strncat_s(analise->cod, 1000, "PARA ", strlen("PARA "));
 		leToken();
-		_ret atrib = ATRIB();
-		if (atrib.ret)
+		_ret *atrib = ATRIB();
+		if (atrib->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), atrib.cod, sizeof(atrib.cod));
+			strncat_s(analise->cod, 1000, atrib->cod, strlen(atrib->cod));
 			if (tk == TKDoisPontos)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+				strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 				leToken();
-				_ret val = VAL();
-				if (val.ret)
+				_ret *val = VAL();
+				if (val->ret)
 				{
-					strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
-					strncat_s(analise.cod, sizeof(analise.cod), "\n\t", sizeof("\n\t"));
+					strncat_s(analise->cod, 1000, val->cod, strlen(val->cod));
+					strncat_s(analise->cod, 1000, "\n\t", strlen("\n\t"));
 					if (tk == TKDoisPontos)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+						strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 						leToken();
-						_ret val2 = VAL();
-						if (!val2.ret)
+						_ret *val2 = VAL();
+						if (!val2->ret)
 						{
 							erroVal();
-							analise.ret = 0;
+							analise->ret = 0;
 							return analise;
 						} else {
-							strncat_s(analise.cod, sizeof(analise.cod), val2.cod, sizeof(val2.cod));
+							strncat_s(analise->cod, 1000, val2->cod, strlen(val2->cod));
 						}
 					}
-					_ret bloco = BLOCO();
-					if (bloco.ret)
+					_ret *bloco = BLOCO();
+					if (bloco->ret)
 					{
-						strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
+						strncat_s(analise->cod, 1000, bloco->cod, strlen(bloco->cod));
 						if (tk == TKEnd)
 						{
-							//strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-							strncat_s(analise.cod, sizeof(analise.cod), "FIMPARA\n", sizeof("FIMPARA\n"));
+							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							strncat_s(analise->cod, 1000, "FIMPARA\n", strlen("FIMPARA\n"));
 							leToken();
-							analise.ret = 1;
+							analise->ret = 1;
 							return analise;
 						}
 						erroEnd();
-						analise.ret = 0;
+						analise->ret = 0;
 						return analise;
 					}
-					analise.ret = 0;
+					analise->ret = 0;
 					return analise;
 				}
 				erroVal();
-				analise.ret = 0;
+				analise->ret = 0;
 				return analise;
 			}
 			erroDoisPt();
-			analise.ret = 0;
+			analise->ret = 0;
 			return analise;
 		}
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret VAL()
+_ret *VAL()
 {
 	int marcaPos = setPos();
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 
-	_ret func = FUNCTION();
-	if (func.ret)
+	_ret *func = FUNCTION();
+	if (func->ret)
 	{
-		strncpy_s(analise.cod, func.cod,sizeof(func.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, func->cod, strlen(func->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
 
-	_ret comp0 = COMP0();
-	if (comp0.ret)
+	_ret *comp0 = COMP0();
+	if (comp0->ret)
 	{
-		strncpy_s(analise.cod,comp0.cod,sizeof(comp0.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, comp0->cod, strlen(comp0->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret aid = id();
-	if (aid.ret)
+	_ret *aid = id();
+	if (aid->ret)
 	{
-		strncpy_s(analise.cod, aid.cod,sizeof(aid.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, aid->cod, strlen(aid->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret constan = cte();
-	if (constan.ret)
+	_ret *constan = cte();
+	if (constan->ret)
 	{
-		strncpy_s(analise.cod, constan.cod,sizeof(constan.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, constan->cod, strlen(constan->cod));
+		analise->ret = 1;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret COMANDO()
+_ret *COMANDO()
 {
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 	int marcaPos = setPos();
 
-	_ret atrib = ATRIB();
+	_ret *atrib = ATRIB();
 
-	if (atrib.ret)
+	if (atrib->ret)
 	{
-		strncpy_s(analise.cod, atrib.cod,sizeof(atrib.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, atrib->cod, strlen(atrib->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret fora = FOR(); 
-	if (fora.ret)
+	_ret *fora = FOR(); 
+	if (fora->ret)
 	{
-		strncpy_s(analise.cod, fora.cod,sizeof(fora.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod, 1000, fora->cod, strlen(fora->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret whileC = WHILE();
-	if (whileC.ret)
+	_ret *whileC = WHILE();
+	if (whileC->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), whileC.cod, sizeof(whileC.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, whileC->cod, strlen(whileC->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret switchC = SWITCH();
-	if (switchC.ret)
+	_ret *switchC = SWITCH();
+	if (switchC->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), switchC.cod, sizeof(switchC.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, switchC->cod, strlen(switchC->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret cmdIf = IF();
-	if (cmdIf.ret)
+	_ret *cmdIf = IF();
+	if (cmdIf->ret)
 	{
-		strncpy_s(analise.cod,cmdIf.cod,sizeof(cmdIf.cod));
-		analise.ret = 1;
+		strncpy_s(analise->cod,1000,cmdIf->cod,strlen(cmdIf->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret tryC = TRY();
-	if (tryC.ret)
+	_ret *tryC = TRY();
+	if (tryC->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tryC.cod, sizeof(tryC.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, tryC->cod, strlen(tryC->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret parFor = PARFOR();
-	if (parFor.ret)
+	_ret *parFor = PARFOR();
+	if (parFor->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), parFor.cod, sizeof(parFor.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, parFor->cod, strlen(parFor->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret criaFunction = CRIAFUNCTION();
-	if (criaFunction.ret)
+	_ret *criaFunction = CRIAFUNCTION();
+	if (criaFunction->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), criaFunction.cod, sizeof(criaFunction.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, criaFunction->cod, strlen(criaFunction->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret function = FUNCTION();
-	if (function.ret)
+	_ret *function = FUNCTION();
+	if (function->ret)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), function.cod, sizeof(function.cod));
-		analise.ret = 1;
+		strncat_s(analise->cod, 1000, function->cod, strlen(function->cod));
+		analise->ret = 1;
 		return analise;
 	}
 	voltaPos(marcaPos);
 	if (tk == TKBreak)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	else if (tk == TKContinue)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		analise.ret = 1;
+		analise->ret = 1;
 		return analise;
 	}
 	else if (tk == TKReturn)
 	{
-		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret val = VAL();
-		if (val.ret)
+		_ret *val = VAL();
+		if (val->ret)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), val.cod, sizeof(val.cod));
-			analise.ret = 1;
+			strncat_s(analise->cod, 1000, val->cod, strlen(val->cod));
+			analise->ret = 1;
 			return analise;
 		}
 		erroVal();
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
-	analise.ret = 0;
+	analise->ret = 0;
 	return analise;
 }
 
-_ret BLOCO()
+_ret *BLOCO()
 {
 
-	_ret analise;
-	strncpy_s(analise.cod,"",sizeof(""));
-	_ret comando = COMANDO();
-	if (comando.ret)
+	_ret *analise_bl = (_ret*)malloc(sizeof(_ret) * 1);
+	analise_bl->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise_bl->cod, 1000, "", strlen(""));
+	_ret *comando = COMANDO();
+	//strncpy_s(comando->cod, "", sizeof(""));
+	if (comando->ret)
 	{
-		strncpy_s(analise.cod,comando.cod,sizeof(comando.cod));
+		strncpy_s(analise_bl->cod, 1000, comando->cod, strlen(comando->cod));
 		if (tk == TKPontoeVirg)
 		{
-			strncat_s(analise.cod, sizeof(analise.cod), ";\n", sizeof(";\n"));
+			strncat_s(analise_bl->cod, 1000, ";\n", strlen(";\n"));
 			leToken();
 		}
 		if (tk == TKId || tk == TKFor || tk == TKWhile || tk == TKSwitch ||
@@ -2278,72 +2324,91 @@ _ret BLOCO()
 			tk == TKBreak || tk == TKContinue || tk == TKReturn)
 		{
 
-	//		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			_ret bloco = BLOCO();
-			if (bloco.ret)
+	//		strncat_s(analise_bl->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+			_ret *bloco = BLOCO();
+			if (bloco->ret)
 			{
-				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
-				analise.ret = 1;
-				return analise;
+				strncat_s(analise_bl->cod, 1000, bloco->cod, strlen(bloco->cod));
+				analise_bl->ret = 1;
+				return analise_bl;
 			}
-			analise.ret = 0;
-			return analise;
+			analise_bl->ret = 0;
+			return analise_bl;
 		}
-		analise.ret = 1;
-		return analise;
+		analise_bl->ret = 1;
+		return analise_bl;
 	}
 	else
 	{
-		analise.ret = 0;
-		return analise;
+		analise_bl->ret = 0;
+		return analise_bl;
 	}
 }
 
 /*void atribuirCod(_ret *vet, char string) {
-	strncpy_s((*vet).cod, string, sizeof(string));
-//	strncpy_s((*vet).cod, "teste", sizeof("teste"));
+	strncpy_s((*vet)->cod, string, sizeof(string));
+//	strncpy_s((*vet)->cod, "teste", sizeof("teste"));
 }*/
 
-_ret INICIO()
+_ret *INICIO()
 {
-	_ret analise;
+	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
+	//_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	_ret *tmp;
 
-	tmp = &analise;
-	tmp = (_ret *)malloc(sizeof(_ret)*1);
-	//memset(tmp, 0, sizeof(_ret) * 1000); 
-	strncpy_s(analise.cod,"",sizeof(""));
+	//tmp = &analise;
+	//tmp = (_ret *)malloc(sizeof(_ret)*1);
+	//memset(tmp, 0, sizeof(_ret) * 1); 
+	//strncpy_s(analise->cod,1000, "", sizeof(""));
+	//analise->cod = (char *)malloc(sizeof(char) * 1000);
+	// analise = (_ret *)malloc(sizeof(_ret));
+	analise->cod = (char *)malloc(sizeof(char) * 1000);
+	strncpy_s(analise->cod, 1000, "", strlen(""));
 		//necessário para strncat (strncat não concatena strings sem possuir terminador nulo \0
 		//ou strncpy_s ou string[strlen(string)] = '\0'; porém a última alternativa resulta em duas strings gigantes contactenadas
 	
-	_ret bloco = BLOCO();
-	//strncpy_s(bloco.cod, "", sizeof(""));
+	_ret *bloco = BLOCO();
+	// strncpy_s(bloco->cod, "", sizeof(""));
 	//tmp = &bloco;
 	//tmp = (_ret *)malloc(sizeof(_ret) * 3000);
-	if (bloco.ret)
+	//memset(tmp, 0, sizeof(_ret) * 1);
+	if (bloco->ret)
 	{
-		analise.ret = 1;
-		strncat_s(analise.cod, sizeof(analise.cod), "algoritmo 'compiladores'\n\n", sizeof("algoritmo 'compiladores'\n\n"));
-		strncat_s(analise.cod, sizeof(analise.cod), "var\n", sizeof("var\n"));
+		analise->ret = 1;
+		strncat_s(analise->cod, 1000, "algoritmo 'compiladores'\n\n", strlen("algoritmo 'compiladores'\n\n"));
+		strncat_s(analise->cod, 1000, "var\n", strlen("var\n"));
 		int indice;
 		for (indice = 0; indice < nroVariaveis; indice++) {
 			if (indice > 0) {
-				strncat_s(analise.cod, sizeof(analise.cod), ", ", sizeof(", "));
+				strncat_s(analise->cod, 1000, ", ", strlen(", "));
 			}
-			strncat_s(analise.cod, sizeof(analise.cod), variaveis[indice], sizeof(variaveis[indice]));
+			strncat_s(analise->cod, 1000, variaveis[indice], strlen(variaveis[indice]));
 		}
 		if (nroVariaveis > 0) {
-			strncat_s(analise.cod, sizeof(analise.cod), " : real\n", sizeof(" : real\n"));
+			strncat_s(analise->cod, 1000, " : real\n", strlen(" : real\n"));
 		}
-		strncat_s(analise.cod, sizeof(analise.cod), "\ninicio\n", sizeof("inicio\n"));
-		strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
-		strncat_s(analise.cod, sizeof(analise.cod), "\nfimalgoritmo", sizeof("\nfimalgoritmo"));
-		fprintf(portugues, "%s", analise.cod);
+		strncat_s(analise->cod, 1000, "\ninicio\n", strlen("inicio\n"));
+		//char *tmp2;
+		//tmp2 = (char *) &(analise->cod);
+		//tmp2 = (char *) realloc(tmp,sizeof(char) * 3000);
+		//memset(tmp, 0, sizeof(char) * 3000);
+		//analise->cod = (char [250])realloc(analise->cod, sizeof(char) * 3000);
+			//(char *) realloc(analise->cod, sizeof(char) * 3000);
+		//analise = (_ret *) realloc(analise, sizeof(_ret) * 30);
+		//char test[3000];
+		//strncpy(analise->cod, test, sizeof(char) * 3000);
+		//analise->cod = test;
+		//analise->cod =(char *) malloc(strlen(analise->cod) + strlen(bloco->cod)+1);
+		strncat_s((char *)analise->cod, (strlen(analise->cod) + strlen(bloco->cod)+2), 
+			(char *)bloco->cod, strlen(bloco->cod));
+		strncat_s(analise->cod, strlen(analise->cod) + strlen("\nfimalgoritmo\n") +1, 
+			"\nfimalgoritmo\n", strlen("\nfimalgoritmo\n"));
+		fprintf(portugues, "%s", analise->cod);
 		return analise;
 	}
 	else
 	{
-		analise.ret = 0;
+		analise->ret = 0;
 		return analise;
 	}
 }
@@ -2398,15 +2463,15 @@ int main()
 	while (tk != TKFim)
 	{
 
-		_ret inicio = INICIO();
+		_ret *inicio = INICIO();
 
-		if (!inicio.ret)
+		if (!inicio->ret)
 		{
 			ocorreuErro();
 			getchar();
 			return 0;
 		}
-	//	fprintf(portugues, "%s \n", inicio.cod);
+	//	fprintf(portugues, "%s \n", inicio->cod);
 		leToken();
 	}
 
