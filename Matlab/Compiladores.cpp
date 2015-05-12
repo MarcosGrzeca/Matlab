@@ -517,7 +517,7 @@ _ret *COMP0();
 _ret *BLOCO();
 _ret *VAL();
 
-_ret *id()
+_ret *id(int salvarTabSimb)
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
@@ -525,7 +525,9 @@ _ret *id()
 	if (tk == TKId)
 	{
 		strncat_s(analise->cod,1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-		incluirTS(tokens[posTK].elemento);
+		if (salvarTabSimb == 1) {
+			incluirTS(tokens[posTK].elemento);
+		}
 		leToken();
 		analise->ret = 1;
 		return analise;
@@ -584,7 +586,7 @@ _ret *ATRIB()
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
-	_ret *ident = id();
+	_ret *ident = id(1);
 	if (ident->ret)
 	{
 		strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
@@ -640,7 +642,7 @@ _ret *EXPFIM()
 		return analise;
 	}
 	int marcaPos = setPos();
-	_ret *ident = id();
+	_ret *ident = id(1);
 	if (ident->ret)
 	{
 		strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
@@ -1734,7 +1736,7 @@ _ret *FUNCTION()
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 
-	_ret *ident = id();
+	_ret *ident = id(0);
 	if (ident->ret)
 	{
 		strncpy_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
@@ -1993,7 +1995,7 @@ _ret *SWITCH()
 	{
 		strncat_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		_ret *ident = id();
+		_ret *ident = id(1);
 		if (ident->ret)
 		{
 			strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
@@ -2171,7 +2173,7 @@ _ret *VAL()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *aid = id();
+	_ret *aid = id(1);
 	if (aid->ret)
 	{
 		strncpy_s(analise->cod, 1000, aid->cod, strlen(aid->cod));

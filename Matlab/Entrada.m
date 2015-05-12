@@ -1,4 +1,4 @@
-if ((x >= minVal) && (x <= maxVal) || (x == minVal))
+if ((x >= minVal) && (x <= maxVal) || (x == minVal) || (x ~= minVal))
     b=x;
     fb=fx;
 else

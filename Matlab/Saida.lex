@@ -17,7 +17,13 @@ Token: 1	 Linha: 1	 Coluna: 40	Lex: x
 Token: 28	 Linha: 1	 Coluna: 42	Lex: == 
 Token: 1	 Linha: 1	 Coluna: 45	Lex: minVal 
 Token: 14	 Linha: 1	 Coluna: 51	Lex: ) 
-Token: 14	 Linha: 1	 Coluna: 52	Lex: ) 
+Token: 36	 Linha: 1	 Coluna: 53	Lex: || 
+Token: 13	 Linha: 1	 Coluna: 56	Lex: ( 
+Token: 1	 Linha: 1	 Coluna: 57	Lex: x 
+Token: 29	 Linha: 1	 Coluna: 59	Lex: ~= 
+Token: 1	 Linha: 1	 Coluna: 62	Lex: minVal 
+Token: 14	 Linha: 1	 Coluna: 68	Lex: ) 
+Token: 14	 Linha: 1	 Coluna: 69	Lex: ) 
 Token: 1	 Linha: 2	 Coluna: 5	Lex: b 
 Token: 11	 Linha: 2	 Coluna: 6	Lex: = 
 Token: 1	 Linha: 2	 Coluna: 7	Lex: x 
