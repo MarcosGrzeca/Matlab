@@ -2265,7 +2265,6 @@ _ret BLOCO()
 	_ret analise;
 	strncpy_s(analise.cod,"",sizeof(""));
 	_ret comando = COMANDO();
-	strncpy_s(comando.cod, "", sizeof(""));
 	if (comando.ret)
 	{
 		strncpy_s(analise.cod,comando.cod,sizeof(comando.cod));
@@ -2281,7 +2280,6 @@ _ret BLOCO()
 
 	//		strncat_s(analise.cod, sizeof(analise.cod), tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			_ret bloco = BLOCO();
-			strncpy_s(bloco.cod, "", sizeof(""));
 			if (bloco.ret)
 			{
 				strncat_s(analise.cod, sizeof(analise.cod), bloco.cod, sizeof(bloco.cod));
@@ -2319,7 +2317,7 @@ _ret INICIO()
 		//ou strncpy_s ou string[strlen(string)] = '\0'; porém a última alternativa resulta em duas strings gigantes contactenadas
 	
 	_ret bloco = BLOCO();
-	strncpy_s(bloco.cod, "", sizeof(""));
+	//strncpy_s(bloco.cod, "", sizeof(""));
 	//tmp = &bloco;
 	//tmp = (_ret *)malloc(sizeof(_ret) * 3000);
 	if (bloco.ret)

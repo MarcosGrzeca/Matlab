@@ -6,6 +6,8 @@ else
     fa=fx;
 end
 
+x = teste(12);
+
 i = 7;
 for i=1:r
     k=1;
