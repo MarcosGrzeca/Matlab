@@ -1431,7 +1431,7 @@ _ret *ELSE()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKElse)
 	{
-		strncpy_s(analise->cod, 1000, "SENAO\n\t", strlen("SENAO\n\t"));
+		strncpy_s(analise->cod, 1000, "SENAO\r\n\t", strlen("SENAO\r\n\t"));
 		leToken();
 		_ret *bloco = BLOCO();
 		if (bloco->ret)
@@ -1443,7 +1443,7 @@ _ret *ELSE()
 	}
 	else if (tk == TKElseIf)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE\n\t", strlen("SENAO SE\n\t"));
+		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE\r\n\t", strlen("SENAO SE\r\n\t"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1502,7 +1502,7 @@ _ret *IF()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKIf)
 	{
-		strncpy_s(analise->cod, 1000, "\nSE ", strlen("\nSE "));
+		strncpy_s(analise->cod, 1000, "\r\nSE ", strlen("\r\nSE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1515,7 +1515,7 @@ _ret *IF()
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\n\t", strlen(" ENTAO\n\t"));
+					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n\t", strlen(" ENTAO\r\n\t"));
 					leToken();
 					_ret *bloco = BLOCO();
 					if (bloco->ret)
@@ -1542,7 +1542,7 @@ _ret *IF()
 						}
 						if (tk == TKEnd)
 						{
-							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\n", strlen("FIMSE\n"));
+							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
 							leToken();
 							analise->ret = 1;
 							return analise;
@@ -2104,7 +2104,7 @@ _ret *FOR()
 				if (val->ret)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
-					strncat_s(analise->cod, BUFSIZEINI, "\n\t", strlen("\n\t"));
+					strncat_s(analise->cod, BUFSIZEINI, "\r\n\t", strlen("\r\n\t"));
 					if (tk == TKDoisPontos)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
@@ -2126,7 +2126,7 @@ _ret *FOR()
 						if (tk == TKEnd)
 						{
 							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-							strncat_s(analise->cod, BUFSIZEINI, "FIMPARA\n", strlen("FIMPARA\n"));
+							strncat_s(analise->cod, BUFSIZEINI, "FIMPARA\r\n", strlen("FIMPARA\r\n"));
 							leToken();
 							analise->ret = 1;
 							return analise;
@@ -2322,7 +2322,7 @@ _ret *BLOCO()
 		strncpy_s(analise_bl->cod, 1000, comando->cod, strlen(comando->cod));
 		if (tk == TKPontoeVirg)
 		{
-			strncat_s(analise_bl->cod, 1000, ";\n", strlen(";\n"));
+			strncat_s(analise_bl->cod, 1000, ";\r\n", strlen(";\r\n"));
 			leToken();
 		}
 		if (tk == TKId || tk == TKFor || tk == TKWhile || tk == TKSwitch ||
@@ -2381,8 +2381,8 @@ _ret *INICIO()
 	if (bloco->ret)
 	{
 		analise->ret = 1;
-		strncat_s(analise->cod, BUFSIZEINI, "algoritmo 'compiladores'\n\n", strlen("algoritmo 'compiladores'\n\n"));
-		strncat_s(analise->cod, BUFSIZEINI, "var\n", strlen("var\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "algoritmo 'compiladores'\r\n\r\n", strlen("algoritmo 'compiladores'\r\n\r\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "var\r\n", strlen("var\r\n"));
 		int indice;
 		for (indice = 0; indice < nroVariaveis; indice++) {
 			if (indice > 0) {
@@ -2391,9 +2391,9 @@ _ret *INICIO()
 			strncat_s(analise->cod, BUFSIZEINI, variaveis[indice], strlen(variaveis[indice]));
 		}
 		if (nroVariaveis > 0) {
-			strncat_s(analise->cod, BUFSIZEINI, " : real\n", strlen(" : real\n"));
+			strncat_s(analise->cod, BUFSIZEINI, " : real\r\n", strlen(" : real\r\n"));
 		}
-		strncat_s(analise->cod, BUFSIZEINI, "\ninicio\n\n", strlen("inicio\n\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "\ninicio\r\n\r\n", strlen("inicio\r\n\r\n"));
 		//char *tmp2;
 		//tmp2 = (char *) &(analise->cod);
 		//tmp2 = (char *) realloc(tmp,sizeof(char) * 3000);
@@ -2407,8 +2407,8 @@ _ret *INICIO()
 		//analise->cod =(char *) malloc(strlen(analise->cod) + strlen(bloco->cod)+1);
 		strncat_s((char *)analise->cod, (strlen(analise->cod) + strlen(bloco->cod)+2), 
 			(char *)bloco->cod, strlen(bloco->cod));
-		strncat_s(analise->cod, strlen(analise->cod) + strlen("\nfimalgoritmo\n") +1, 
-			"\nfimalgoritmo\n", strlen("\nfimalgoritmo\n"));
+		strncat_s(analise->cod, strlen(analise->cod) + strlen("\r\nfimalgoritmo\r\n") +1, 
+			"\r\nfimalgoritmo\r\n", strlen("\r\nfimalgoritmo\r\n"));
 		fprintf(portugues, "%s", analise->cod);
 		return analise;
 	}
@@ -2455,11 +2455,11 @@ int main()
 		exit(1);
 	}
 
-	portugues = fopen("Portugues.lex", "wb+");
+	portugues = fopen("Portugues.txt", "wb+");
 
 	if (portugues == NULL)
 	{
-		printf("Erro ao abrir o arquivo de saida (Portugues.lex).\n");
+		printf("Erro ao abrir o arquivo de saida (Portugues.txt).\n");
 		getchar();
 		exit(1);
 	}
