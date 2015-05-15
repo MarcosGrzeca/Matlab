@@ -1358,6 +1358,7 @@ _ret *COMP1()
 	{
 		//strncpy_s(analise->cod,1000,"|",sizeof("|"));
 		//strncpy_s(analise->cod,1000," ou ",sizeof(" ou "));
+		strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
 		leToken();
 		_ret *comp2 = COMP2();
 		if (comp2->ret)
@@ -1402,7 +1403,7 @@ _ret *COMP0()
 		strncat_s(analise->cod, BUFSIZEINI, comp2->cod, strlen(comp2->cod));
 		if (tk == TKOuLogico)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
+			//strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
 			_ret *comp1 = COMP1();
 			if (comp1->ret)
 			{
@@ -2392,7 +2393,7 @@ _ret *INICIO()
 		if (nroVariaveis > 0) {
 			strncat_s(analise->cod, BUFSIZEINI, " : real\n", strlen(" : real\n"));
 		}
-		strncat_s(analise->cod, BUFSIZEINI, "\ninicio\n", strlen("inicio\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "\ninicio\n\n", strlen("inicio\n\n"));
 		//char *tmp2;
 		//tmp2 = (char *) &(analise->cod);
 		//tmp2 = (char *) realloc(tmp,sizeof(char) * 3000);
