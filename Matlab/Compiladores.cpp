@@ -1668,6 +1668,7 @@ _ret *TRY(int nivel)
 						}	
 						//strncat_s(analise->cod, BUFSIZEINI, "FIM CATCH", strlen("FIM CATCH"));
 						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
 						leToken();
 						analise->ret = 1;
 						return analise;
@@ -2022,6 +2023,13 @@ _ret *CASEVALUE0()
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
+
+	//Alteração na gramatica
+	if (tk == TKSubtracao) {
+		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		leToken();
+	}
+
 	_ret *cons = cte();
 	if (cons->ret)
 	{
@@ -2062,25 +2070,38 @@ _ret *CASE(int nivel)
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKCase)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//for (int i = 0; i < nivel; i++) {
+		//	strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		//}
+		strncat_s(analise->cod, BUFSIZEINI, "CASO ", strlen("CASO "));
 		leToken();
 		_ret *casevalue0 = CASEVALUE0();
 		if (casevalue0->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, casevalue0->cod, strlen(casevalue0->cod));
-			nivel = nivel + 1;
-			_ret *bloco = BLOCO(nivel);
+			strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+
+			int nivel2 = nivel + 1;
+			_ret *bloco = BLOCO(nivel2);
 			if (bloco->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 				if (tk == TKCase || tk == TKOtherwise)
 				{
-					strncat_s(analise->cod, BUFSIZEINI, "CASE AASAS", strlen("CASE AASAS"));
-					nivel = nivel + 1;
+					for (int i = 0; i < nivel; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					}
+					/*if (tk == TKOtherwise) {
+						strncat_s(analise->cod, BUFSIZEINI, "OUTROCASO ", strlen("OUTROCASO "));
+					} else {
+						strncat_s(analise->cod, BUFSIZEINI, "CASO ", strlen("CASO "));
+					}*/
+					//nivel = nivel + 1;
 					_ret *casee = CASE(nivel);
 					if (casee->ret)
 					{
-						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(casee->cod));
+						strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
 						analise->ret = 1;
 						return analise;
 					}
@@ -2098,10 +2119,11 @@ _ret *CASE(int nivel)
 	}
 	else if (tk == TKOtherwise)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		strncat_s(analise->cod, BUFSIZEINI, "OUTROCASO\r\n", strlen("OUTROCASO\r\n"));
 		leToken();
-		nivel = nivel + 1;
-		_ret *bloco = BLOCO(nivel);
+		int nivel2 = nivel + 1;
+		_ret *bloco = BLOCO(nivel2);
 		if (bloco->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -2122,20 +2144,33 @@ _ret *SWITCH(int nivel)
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSwitch)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		for (int i = 0; i < nivel; i++) {
+				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		}
+		strncat_s(analise->cod, BUFSIZEINI, "ESCOLHA ", strlen("ESCOLHA "));
 		leToken();
 		_ret *ident = id(1);
 		if (ident->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
-			nivel = nivel + 1;
-			_ret *casee = CASE(nivel);
+			int nivel2 = nivel + 1;
+			strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+			for (int i = 0; i < nivel2; i++) {
+				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+			}
+			_ret *casee = CASE(nivel2);
 			if (casee->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
 				if (tk == TKEnd)
 				{
-					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+					for (int i = 0; i < nivel; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					}
+					//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+					strncat_s(analise->cod, BUFSIZEINI, "FIMESCOLHA\r\n", strlen("FIMESCOLHA\r\n"));
+
 					leToken();
 					analise->ret = 1;
 					return analise;

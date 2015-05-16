@@ -1,7 +1,7 @@
 algoritmo 'compiladores'
 
 var
-	x, n, i, A, a, b, c, d, e, nFactorial, warning : real
+	x, n, i, A, a, b, c, d, e, nFactorial, warning, disp : real
 
 inicio
 	x <- ones(1,10);
@@ -35,4 +35,20 @@ inicio
 		warning('Problem using function.  Assigning a value of 0.');
 		a <- 0;
 	end
+	ESCOLHA n
+		CASO -1
+			disp('negative one')
+		CASO 0
+			disp('zero')
+		CASO 1
+			disp('positive one')
+		OUTROCASO
+			disp('other value')
+	FIMESCOLHA
+	a <- a + b;
+	a <- b / c;
+	a <- a - b;
+	a <- a - (c / (b + d)) * e;
+	a <- -a;
+
 fimalgoritmo

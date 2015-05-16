@@ -35,3 +35,20 @@ catch
     warning('Problem using function.  Assigning a value of 0.');
     a = 0;
 end
+
+switch n
+    case -1
+        disp('negative one')
+    case 0
+        disp('zero')
+    case 1
+        disp('positive one')
+    otherwise
+        disp('other value')
+end
+
+a = a + b;
+a = b / c;
+a = a - b;
+a = a - (c / (b + d)) * e; 
+a = -a;
