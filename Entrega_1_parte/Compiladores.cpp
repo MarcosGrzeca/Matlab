@@ -512,7 +512,7 @@ int setPos()
 }
 
 _ret *EXP0();
-_ret *FUNCTION(int nivel);
+_ret *FUNCTION();
 _ret *EXP1();
 _ret *COMP0();
 _ret *BLOCO(int nivel);
@@ -581,7 +581,7 @@ _ret *cte()
 	return analise;
 }
 
-_ret *ATRIB(int nivel)
+_ret *ATRIB()
 {
 
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
@@ -590,9 +590,6 @@ _ret *ATRIB(int nivel)
 	_ret *ident = id(1);
 	if (ident->ret)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
 		if (tk == TKAtrib)
 		{
@@ -662,7 +659,7 @@ _ret *EXPFIM()
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *function = FUNCTION(0);
+	_ret *function = FUNCTION();
 	if (function->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, function->cod, strlen(function->cod));
@@ -1427,20 +1424,16 @@ _ret *COMP0()
 	}
 }
 
-_ret *ELSE(int nivel)
+_ret *ELSE()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKElse)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
-		strncat_s(analise->cod, 1000, "SENAO\r\n", strlen("SENAO\r\n"));
+		strncpy_s(analise->cod, 1000, "SENAO\r\n\t", strlen("SENAO\r\n\t"));
 		leToken();
-		int nivel2 = nivel + 1;
-		_ret *bloco = BLOCO(nivel2);
+		_ret *bloco = BLOCO(0);
 		if (bloco->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -1450,7 +1443,7 @@ _ret *ELSE(int nivel)
 	}
 	else if (tk == TKElseIf)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE\r\n", strlen("SENAO SE\r\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE\r\n\t", strlen("SENAO SE\r\n\t"));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1464,14 +1457,14 @@ _ret *ELSE(int nivel)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					_ret *bloco = BLOCO(nivel++);
+					_ret *bloco = BLOCO(0);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
 							strncat_s(analise->cod, BUFSIZEINI, "SENAO SE VER", strlen("SENAO SE VER"));
-							_ret *elsee = ELSE(nivel);
+							_ret *elsee = ELSE();
 							if (elsee->ret)
 							{
 								strncat_s(analise->cod, BUFSIZEINI, elsee->cod, strlen(elsee->cod));
@@ -1502,20 +1495,14 @@ _ret *ELSE(int nivel)
 	return analise;
 }
 
-_ret *IF(int nivel)
+_ret *IF()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKIf)
 	{
-		//strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
-		
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
-		//strncpy_s(analise->cod, 1000, "\r\nSE ", strlen("\r\nSE "));
-		strncat_s(analise->cod, BUFSIZEINI, "SE ", strlen("SE "));
+		strncpy_s(analise->cod, 1000, "\r\nSE ", strlen("\r\nSE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1528,10 +1515,9 @@ _ret *IF(int nivel)
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
+					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n\t", strlen(" ENTAO\r\n\t"));
 					leToken();
-					int nivel2 = nivel + 1;
-					_ret *bloco = BLOCO(nivel2);
+					_ret *bloco = BLOCO(0);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -1545,7 +1531,7 @@ _ret *IF(int nivel)
 							}
 							*/
 
-							_ret *elsee = ELSE(nivel);
+							_ret *elsee = ELSE();
 							if (!elsee->ret)
 							{
 								analise->ret = 0;
@@ -1556,9 +1542,6 @@ _ret *IF(int nivel)
 						}
 						if (tk == TKEnd)
 						{
-							for (int i = 0; i < nivel; i++) {
-								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-							}
 							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
 							leToken();
 							analise->ret = 1;
@@ -1586,40 +1569,29 @@ _ret *IF(int nivel)
 	return analise;
 }
 
-_ret *TRY(int nivel)
+_ret *TRY()
 {	
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKTry)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncpy_s(analise->cod, 1000, "TESTAR ", strlen("TESTAR"));
 		leToken();
-		int nivel2 = nivel + 1;
-		_ret *bloco = BLOCO(nivel2);
+		_ret *bloco = BLOCO(0);
 		if (bloco->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 			if (tk == TKCatch)
 			{
-				for (int i = 0; i < nivel; i++) {
-					strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-				}
 				strncat_s(analise->cod, BUFSIZEINI, "CATCH E", strlen("CATCH E"));
 				leToken();
-				int nivel3 = nivel2 + 1;
-				_ret *bloco2 = BLOCO(nivel3);
+				_ret *bloco2 = BLOCO(0);
 				if (bloco2->ret)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, bloco2->cod, strlen(bloco2->cod));
 					if (tk == TKEnd)
 					{
-						for (int i = 0; i < nivel; i++) {
-							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-						}	
 						strncat_s(analise->cod, BUFSIZEINI, "FIM CATCH", strlen("FIM CATCH"));
 						leToken();
 						analise->ret = 1;
@@ -1643,36 +1615,25 @@ _ret *TRY(int nivel)
 	return analise;
 }
 
-_ret *CRIAFUNCTION(int nivel)
+_ret *CRIAFUNCTION()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKFunction)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		int nivel2 = nivel + 1;
-		_ret *function = FUNCTION(nivel2);
+		_ret *function = FUNCTION();
 		if (function->ret)
 		{
-			for (int i = 0; i < nivel; i++) {
-				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-			}
 			strncat_s(analise->cod, BUFSIZEINI, function->cod, strlen(function->cod));
-			int nivel3 = nivel2 + 1;
-			_ret *bloco = BLOCO(nivel3);
+			_ret *bloco = BLOCO(0);
 			if (bloco->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 				if (tk == TKEnd)
 				{
-					for (int i = 0; i < nivel; i++) {
-						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-					}
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
 					analise->ret = 1;
@@ -1773,7 +1734,7 @@ _ret *PARAM0()
 	return analise;
 }
 
-_ret *FUNCTION(int nivel)
+_ret *FUNCTION()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
@@ -1812,17 +1773,14 @@ _ret *FUNCTION(int nivel)
 	return analise;
 }
 
-_ret *PARFOR(int nivel)
+_ret *PARFOR()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
-	_ret *atrib = ATRIB(nivel);
+	_ret *atrib = ATRIB();
 	if (atrib->ret)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncat_s(analise->cod, BUFSIZEINI, atrib->cod, strlen(atrib->cod));
 		if (tk == TKDoisPontos)
 		{
@@ -1836,8 +1794,7 @@ _ret *PARFOR(int nivel)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					int nivel2 = nivel + 1;
-					_ret *bloco = BLOCO(nivel2);
+					_ret *bloco = BLOCO(0);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -1847,9 +1804,6 @@ _ret *PARFOR(int nivel)
 							leToken();
 							if (tk == TKEnd)
 							{
-								for (int i = 0; i < nivel; i++) {
-									strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-								}
 								strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 								analise->ret = 1;
 								return analise;
@@ -1979,7 +1933,7 @@ _ret *CASEVALUE0()
 	return analise;
 }
 
-_ret *CASE(int nivel)
+_ret *CASE()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
@@ -1992,16 +1946,14 @@ _ret *CASE(int nivel)
 		if (casevalue0->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, casevalue0->cod, strlen(casevalue0->cod));
-			nivel = nivel + 1;
-			_ret *bloco = BLOCO(nivel);
+			_ret *bloco = BLOCO(0);
 			if (bloco->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 				if (tk == TKCase || tk == TKOtherwise)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, "CASE AASAS", strlen("CASE AASAS"));
-					nivel = nivel + 1;
-					_ret *casee = CASE(nivel);
+					_ret *casee = CASE();
 					if (casee->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(casee->cod));
@@ -2024,8 +1976,7 @@ _ret *CASE(int nivel)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
-		nivel = nivel + 1;
-		_ret *bloco = BLOCO(nivel);
+		_ret *bloco = BLOCO(0);
 		if (bloco->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -2039,7 +1990,7 @@ _ret *CASE(int nivel)
 	return analise;
 }
 
-_ret *SWITCH(int nivel)
+_ret *SWITCH()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
@@ -2052,8 +2003,7 @@ _ret *SWITCH(int nivel)
 		if (ident->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
-			nivel = nivel + 1;
-			_ret *casee = CASE(nivel);
+			_ret *casee = CASE();
 			if (casee->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
@@ -2078,16 +2028,13 @@ _ret *SWITCH(int nivel)
 	return analise;
 }
 
-_ret *WHILE(int nivel)
+_ret *WHILE()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKWhile)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncat_s(analise->cod, BUFSIZEINI, "ENQUANTO ", strlen("ENQUANTO "));
 		leToken();
 		if (tk == TKAbrePar)
@@ -2102,16 +2049,12 @@ _ret *WHILE(int nivel)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					int nivel2 = nivel + 1;
-					_ret *bloco = BLOCO(nivel2);
+					_ret *bloco = BLOCO(0);
 					if (bloco->ret)
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 					{
 						if (tk == TKEnd)
 						{
-							for (int i = 0; i < nivel; i++) {
-								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-							}
 							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 							strncat_s(analise->cod, BUFSIZEINI, "FIMENQUANTO", strlen("FIMENQUANTO"));
 							leToken();
@@ -2140,19 +2083,16 @@ _ret *WHILE(int nivel)
 	return analise;
 }
 
-_ret *FOR(int nivel)
+_ret *FOR()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKFor)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
 		strncat_s(analise->cod, BUFSIZEINI, "PARA ", strlen("PARA "));
 		leToken();
-		_ret *atrib = ATRIB(0);
+		_ret *atrib = ATRIB();
 		if (atrib->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, atrib->cod, strlen(atrib->cod));
@@ -2164,7 +2104,7 @@ _ret *FOR(int nivel)
 				if (val->ret)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
-					strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+					strncat_s(analise->cod, BUFSIZEINI, "\r\n\t", strlen("\r\n\t"));
 					if (tk == TKDoisPontos)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
@@ -2179,17 +2119,13 @@ _ret *FOR(int nivel)
 							strncat_s(analise->cod, BUFSIZEINI, val2->cod, strlen(val2->cod));
 						}
 					}
-					int nivel2 = nivel + 1;
-					_ret *bloco = BLOCO(nivel2);
+					_ret *bloco = BLOCO(0);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 						if (tk == TKEnd)
 						{
 							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-							for (int i = 0; i < nivel; i++) {
-								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-							}
 							strncat_s(analise->cod, BUFSIZEINI, "FIMPARA\r\n", strlen("FIMPARA\r\n"));
 							leToken();
 							analise->ret = 1;
@@ -2224,7 +2160,7 @@ _ret *VAL()
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 
-	_ret *func = FUNCTION(0);
+	_ret *func = FUNCTION();
 	if (func->ret)
 	{
 		strncpy_s(analise->cod, 1000, func->cod, strlen(func->cod));
@@ -2260,18 +2196,14 @@ _ret *VAL()
 	return analise;
 }
 
-_ret *COMANDO(int nivel)
+_ret *COMANDO()
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	int marcaPos = setPos();
 
-	if (nivel > 0) {
-		 int a;
-		 a = 10;
-	}
-	_ret *atrib = ATRIB(nivel);
+	_ret *atrib = ATRIB();
 
 	if (atrib->ret)
 	{
@@ -2280,7 +2212,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *fora = FOR(nivel); 
+	_ret *fora = FOR(); 
 	if (fora->ret)
 	{
 		strncpy_s(analise->cod, 1000, fora->cod, strlen(fora->cod));
@@ -2288,7 +2220,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *whileC = WHILE(nivel);
+	_ret *whileC = WHILE();
 	if (whileC->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, whileC->cod, strlen(whileC->cod));
@@ -2296,7 +2228,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *switchC = SWITCH(nivel);
+	_ret *switchC = SWITCH();
 	if (switchC->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, switchC->cod, strlen(switchC->cod));
@@ -2304,7 +2236,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *cmdIf = IF(nivel);
+	_ret *cmdIf = IF();
 	if (cmdIf->ret)
 	{
 		strncpy_s(analise->cod,1000,cmdIf->cod,strlen(cmdIf->cod));
@@ -2312,7 +2244,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *tryC = TRY(nivel);
+	_ret *tryC = TRY();
 	if (tryC->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, tryC->cod, strlen(tryC->cod));
@@ -2320,7 +2252,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *parFor = PARFOR(nivel);
+	_ret *parFor = PARFOR();
 	if (parFor->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, parFor->cod, strlen(parFor->cod));
@@ -2328,7 +2260,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *criaFunction = CRIAFUNCTION(nivel);
+	_ret *criaFunction = CRIAFUNCTION();
 	if (criaFunction->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, criaFunction->cod, strlen(criaFunction->cod));
@@ -2336,7 +2268,7 @@ _ret *COMANDO(int nivel)
 		return analise;
 	}
 	voltaPos(marcaPos);
-	_ret *function = FUNCTION(nivel);
+	_ret *function = FUNCTION();
 	if (function->ret)
 	{
 		strncat_s(analise->cod, BUFSIZEINI, function->cod, strlen(function->cod));
@@ -2383,14 +2315,11 @@ _ret *BLOCO(int nivel)
 	_ret *analise_bl = (_ret*)malloc(sizeof(_ret) * 1);
 	analise_bl->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise_bl->cod, 1000, "", strlen(""));
-	_ret *comando = COMANDO(nivel);
+	_ret *comando = COMANDO();
+	//strncpy_s(comando->cod, "", sizeof(""));
 	if (comando->ret)
 	{
-		/*for (int i = 0; i < nivel; i++) {
-			strncat_s(analise_bl->cod, 1000, "\t", strlen("\t"));
-		}*/
-		//strncpy_s(analise_bl->cod, 1000, comando->cod, strlen(comando->cod));
-		strncat_s(analise_bl->cod, 1000, comando->cod, strlen(comando->cod));
+		strncpy_s(analise_bl->cod, 1000, comando->cod, strlen(comando->cod));
 		if (tk == TKPontoeVirg)
 		{
 			strncat_s(analise_bl->cod, 1000, ";\r\n", strlen(";\r\n"));
@@ -2400,7 +2329,7 @@ _ret *BLOCO(int nivel)
 			tk == TKIf || tk == TKTry || tk == TKParfor || tk == TKFunction ||
 			tk == TKBreak || tk == TKContinue || tk == TKReturn)
 		{
-			//nivel = nivel +1;
+			nivel = nivel +1;
 
 	//		strncat_s(analise_bl->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
 			_ret *bloco = BLOCO(nivel);
@@ -2445,7 +2374,7 @@ _ret *INICIO()
 		//necessário para strncat (strncat não concatena strings sem possuir terminador nulo \0
 		//ou strncpy_s ou string[strlen(string)] = '\0'; porém a última alternativa resulta em duas strings gigantes contactenadas
 	
-	_ret *bloco = BLOCO(1);
+	_ret *bloco = BLOCO(0);
 	// strncpy_s(bloco->cod, "", sizeof(""));
 	//tmp = &bloco;
 	//tmp = (_ret *)malloc(sizeof(_ret) * 3000);

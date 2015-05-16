@@ -3,6 +3,15 @@ minVal = 14;
 maxVal = 50;
 
 if (((x >= minVal) && (x <= maxVal) || (x == minVal)) || (x ~= minVal))
+    if (a > b)
+        b=x;
+        if (a > b)
+            b=x;
+            if (a > b)
+                b=x;
+            end
+        end
+    end
     b=x;
     fb=fx;
 else
@@ -21,4 +30,7 @@ x = teste(12);
 i = 7;
 for i=1:r
     k=1;
+    for i=1:r
+        k=1;
+    end
 end
