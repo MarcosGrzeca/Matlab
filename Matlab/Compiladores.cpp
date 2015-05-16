@@ -790,7 +790,8 @@ _ret *EXP12()
 
 	if (tk == TKEBinario)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		strncat_s(analise->cod, BUFSIZEINI, " e ", strlen(" e "));
 		leToken();
 		_ret *exp13 = EXP13();
 		if (exp13->ret)
@@ -858,7 +859,7 @@ _ret *EXP10()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKDivisao)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *exp11 = EXP11();
 		if (exp11->ret)
@@ -899,7 +900,9 @@ _ret *EXP9()
 		strncat_s(analise->cod, BUFSIZEINI, exp11->cod, strlen(exp11->cod));
 		if (tk == TKDivisao)
 		{
+			strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 			_ret *exp10 = EXP10();
 			if (exp10->ret)
 			{
@@ -924,7 +927,7 @@ _ret *EXP8()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKMultiplicacao)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *exp9 = EXP9();
 		if (exp9->ret)
@@ -932,7 +935,7 @@ _ret *EXP8()
 			strncat_s(analise->cod, BUFSIZEINI, exp9->cod, strlen(exp9->cod));
 			if (tk == TKMultiplicacao)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 				_ret *exp8 = EXP8();
 				if (exp8->ret)
 				{
@@ -965,7 +968,9 @@ _ret *EXP7()
 		strncat_s(analise->cod, BUFSIZEINI, exp9->cod, strlen(exp9->cod));
 		if (tk == TKMultiplicacao)
 		{
+			strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 			_ret *exp8 = EXP8();
 			if (exp8->ret)
 			{
@@ -990,7 +995,8 @@ _ret *EXP6()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKOuBinario)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
 		leToken();
 		_ret *exp7 = EXP7();
 		if (exp7->ret)
@@ -998,7 +1004,8 @@ _ret *EXP6()
 			strncat_s(analise->cod, BUFSIZEINI, exp7->cod, strlen(exp7->cod));
 			if (tk == TKOuBinario)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
 				_ret *exp6 = EXP6();
 				if (exp6->ret)
 				{
@@ -1031,7 +1038,8 @@ _ret *EXP5()
 		strncat_s(analise->cod, BUFSIZEINI, exp7->cod, strlen(exp7->cod));
 		if (tk == TKOuBinario)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			strncat_s(analise->cod, BUFSIZEINI, " ou ", strlen(" ou "));
 			_ret *exp6 = EXP6();
 			if (exp6->ret)
 			{
@@ -1056,17 +1064,19 @@ _ret *EXP4()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKSubtracao)
 	{
-		strncpy_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncpy_s(analise->cod, 1000, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *exp5 = EXP5();
 		if (exp5->ret)
 		{
+			strncat_s(analise->cod, BUFSIZEINI, exp5->cod, strlen(exp5->cod));
 			if (tk == TKSubtracao)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			_ret *exp4 = EXP4();
 				if (exp4->ret)
 				{
+					strncat_s(analise->cod, BUFSIZEINI, exp4->cod, strlen(exp4->cod));
 					analise->ret = 1;
 					return analise;
 				}
@@ -1095,7 +1105,7 @@ _ret *EXP3()
 		strncat_s(analise->cod, BUFSIZEINI, exp5->cod, strlen(exp5->cod));
 		if (tk == TKSubtracao)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, "-", strlen("-"));
+			strncat_s(analise->cod, BUFSIZEINI, " - ", strlen(" - "));
 			_ret *exp4 = EXP4();
 			if (exp4->ret)
 			{
@@ -1127,7 +1137,7 @@ _ret *EXP2()
 			strncat_s(analise->cod, BUFSIZEINI, exp3->cod, strlen(exp3->cod));
 			if (tk == TKSoma)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, "+", strlen("+"));
+				strncat_s(analise->cod, BUFSIZEINI, " + ", strlen(" + "));
 				_ret *exp2 = EXP2();
 				if (exp2->ret)
 				{
@@ -1160,7 +1170,7 @@ _ret *EXP1()
 		strncat_s(analise->cod, BUFSIZEINI, exp3->cod, strlen(exp3->cod));
 		if (tk == TKSoma)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, "+", strlen("+"));
+			strncat_s(analise->cod, BUFSIZEINI, " + ", strlen(" + "));
 			_ret *exp2 = EXP2();
 			if (exp2->ret)
 			{
@@ -1216,7 +1226,9 @@ _ret *COMP5()
 			} else	if (tk == TKDiferente) {
 				strncat_s(analise->cod, BUFSIZEINI, " <> ", strlen(" <> "));
 			} else {
+				strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
 			}
 			leToken();
 
@@ -1245,7 +1257,8 @@ _ret *COMP4()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKNegacao)
 	{
-		strncpy_s(analise->cod, 1000, "-", strlen("-"));
+	//	strncpy_s(analise->cod, 1000, "-", strlen("-"));
+		strncpy_s(analise->cod, 1000, "nao", strlen("nao"));
 		leToken();
 		_ret *comp5 = COMP5();
 		if (comp5->ret)
@@ -1293,6 +1306,7 @@ _ret *COMP3()
 		//strncat_s(analise->cod,1000, "&", sizeof("&"));
 		//strncat_s(analise->cod,1000, " e ", sizeof(" e "));
 		leToken();
+		
 		_ret *comp4 = COMP4();
 		if (comp4->ret)
 		{
@@ -1456,7 +1470,10 @@ _ret *ELSE(int nivel)
 	}
 	else if (tk == TKElseIf)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE\r\n", strlen("SENAO SE\r\n"));
+		for (int i = 0; i < nivel; i++) {
+			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		}
+		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1468,15 +1485,26 @@ _ret *ELSE(int nivel)
 				strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
 				if (tk == TKFechaPar)
 				{
+					/*for (int i = 0; i < nivel; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					}*/
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
-					_ret *bloco = BLOCO(nivel++);
+					int nivel2 = nivel + 1;
+					_ret *bloco = BLOCO(nivel2);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							strncat_s(analise->cod, BUFSIZEINI, "SENAO SE VER", strlen("SENAO SE VER"));
+							for (int i = 0; i < nivel; i++) {
+								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+							}
+							if (tk == TKElse) {
+								strncat_s(analise->cod, BUFSIZEINI, "SENAO ", strlen("SENAO "));
+							} else {
+								strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
+							}
 							_ret *elsee = ELSE(nivel);
 							if (elsee->ret)
 							{
@@ -1534,13 +1562,13 @@ _ret *IF(int nivel)
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+					/*strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
 					//int nivel4 = nivel + 1;
 					nivel = nivel + 1;
 					for (int i = 0; i < nivel; i++) {
 						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-					}
-					strncat_s(analise->cod, BUFSIZEINI, "ENTAO\r\n", strlen(" ENTAO\r\n"));
+					}*/
+					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
 					leToken();
 					int nivel2 = nivel + 1;
 					_ret *bloco = BLOCO(nivel2);
@@ -1568,7 +1596,6 @@ _ret *IF(int nivel)
 						}
 						if (tk == TKEnd)
 						{
-							nivel = nivel -1;
 							for (int i = 0; i < nivel; i++) {
 								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}
@@ -1609,7 +1636,10 @@ _ret *TRY(int nivel)
 		for (int i = 0; i < nivel; i++) {
 			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 		}
-		strncpy_s(analise->cod, 1000, "TESTAR ", strlen("TESTAR"));
+		//strncpy_s(analise->cod, 1000, "TESTAR ", strlen("TESTAR"));
+		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+		
 		leToken();
 		int nivel2 = nivel + 1;
 		_ret *bloco = BLOCO(nivel2);
@@ -1621,10 +1651,13 @@ _ret *TRY(int nivel)
 				for (int i = 0; i < nivel; i++) {
 					strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 				}
-				strncat_s(analise->cod, BUFSIZEINI, "CATCH E", strlen("CATCH E"));
+				//strncat_s(analise->cod, BUFSIZEINI, "CATCH E", strlen("CATCH E"));
+				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+		
 				leToken();
 				int nivel3 = nivel2 + 1;
-				_ret *bloco2 = BLOCO(nivel3);
+				_ret *bloco2 = BLOCO(nivel2);
 				if (bloco2->ret)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, bloco2->cod, strlen(bloco2->cod));
@@ -1633,7 +1666,8 @@ _ret *TRY(int nivel)
 						for (int i = 0; i < nivel; i++) {
 							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 						}	
-						strncat_s(analise->cod, BUFSIZEINI, "FIM CATCH", strlen("FIM CATCH"));
+						//strncat_s(analise->cod, BUFSIZEINI, "FIM CATCH", strlen("FIM CATCH"));
+						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 						leToken();
 						analise->ret = 1;
 						return analise;
@@ -1729,7 +1763,7 @@ _ret *PARAM1()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKVirgula)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *param2 = PARAM2();
 		if (param2->ret)
@@ -1795,7 +1829,11 @@ _ret *FUNCTION(int nivel)
 	_ret *ident = id(0);
 	if (ident->ret)
 	{
-		strncpy_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
+		for (int i = 0; i < nivel; i++) {
+			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		}
+	
+		strncat_s(analise->cod, 1000, ident->cod, strlen(ident->cod));
 		if (tk == TKAbrePar)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
@@ -1808,6 +1846,9 @@ _ret *FUNCTION(int nivel)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					leToken();
+					if (tk != 18) {
+						strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+					}
 					analise->ret = 1;
 					return analise;
 				}
@@ -1827,67 +1868,88 @@ _ret *FUNCTION(int nivel)
 
 _ret *PARFOR(int nivel)
 {
+	//Troca na analise lexica e sintatica
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
-	_ret *atrib = ATRIB(nivel, 0);
-	if (atrib->ret)
+	if (tk == TKParfor)
 	{
 		for (int i = 0; i < nivel; i++) {
 			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 		}
-		strncat_s(analise->cod, BUFSIZEINI, atrib->cod, strlen(atrib->cod));
-		if (tk == TKDoisPontos)
+		strncat_s(analise->cod, BUFSIZEINI, "PARA ", strlen("PARA "));
+		leToken();
+		_ret *atrib = ATRIB(nivel, 1);
+		if (atrib->ret)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-			//strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
-			leToken();
-			_ret *val = VAL();
-			if (val->ret)
+			//strncat_s(analise->cod, BUFSIZEINI, " de ", strlen(" de "));
+			strncat_s(analise->cod, BUFSIZEINI, atrib->cod, strlen(atrib->cod));
+			if (tk == TKDoisPontos)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
-				if (tk == TKPontoeVirg)
+			//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				//strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+				leToken();
+				/*if (tk == TKDoisPontos) {
+					strncat_s(analise->cod, BUFSIZEINI, " passo ", strlen(" passo "));
+				} else {
+					strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+				}*/
+				_ret *val = VAL();
+				if (val->ret)
 				{
-					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					leToken();
+					if (tk == TKDoisPontos)
+					{
+						//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, " passo ", strlen(" passo "));
+						strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
+						leToken();
+						_ret *val2 = VAL();
+						if (!val2->ret)
+						{
+							erroVal();
+							analise->ret = 0;
+							return analise;
+						} else {
+							strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+							strncat_s(analise->cod, BUFSIZEINI, val2->cod, strlen(val2->cod));
+							strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
+						}
+					} else {
+						strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+						strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
+						strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
+					}
 					int nivel2 = nivel + 1;
 					_ret *bloco = BLOCO(nivel2);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
-						if (tk == TKPontoeVirg)
+						if (tk == TKEnd)
 						{
-							strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-							leToken();
-							if (tk == TKEnd)
-							{
-								for (int i = 0; i < nivel; i++) {
-									strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-								}
-								strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-								analise->ret = 1;
-								return analise;
+							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+							for (int i = 0; i < nivel; i++) {
+								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}
-							erroEnd();
-							analise->ret = 0;
+							strncat_s(analise->cod, BUFSIZEINI, "FIMPARA\r\n", strlen("FIMPARA\r\n"));
+							leToken();
+							analise->ret = 1;
 							return analise;
 						}
-						msgErro("Ponto e virgula esperado");
+						erroEnd();
 						analise->ret = 0;
 						return analise;
 					}
 					analise->ret = 0;
 					return analise;
 				}
-				msgErro("Ponto e virgula esperado");
+				erroVal();
 				analise->ret = 0;
 				return analise;
 			}
-			erroVal();
+			erroDoisPt();
 			analise->ret = 0;
 			return analise;
 		}
-		erroDoisPt();
 		analise->ret = 0;
 		return analise;
 	}
@@ -2115,6 +2177,7 @@ _ret *WHILE(int nivel)
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+					strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
 					leToken();
 					int nivel2 = nivel + 1;
 					_ret *bloco = BLOCO(nivel2);
@@ -2127,7 +2190,7 @@ _ret *WHILE(int nivel)
 								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}
 							//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-							strncat_s(analise->cod, BUFSIZEINI, "FIMENQUANTO", strlen("FIMENQUANTO"));
+							strncat_s(analise->cod, BUFSIZEINI, "FIMENQUANTO\r\n", strlen("FIMENQUANTO\r\n"));
 							leToken();
 							analise->ret = 1;
 							return analise;
@@ -2140,6 +2203,40 @@ _ret *WHILE(int nivel)
 					return analise;
 				}
 				erroFechaPar();
+				analise->ret = 0;
+				return analise;
+			}
+			analise->ret = 0;
+			return analise;
+		} else {
+			//Analise lexica adicionada
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
+			{
+				strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+				strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
+				//leToken();
+				int nivel2 = nivel + 1;
+				_ret *bloco = BLOCO(nivel2);
+				if (bloco->ret)
+					strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
+				{
+					if (tk == TKEnd)
+					{
+						for (int i = 0; i < nivel; i++) {
+							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+						}
+						//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, "FIMENQUANTO\r\n", strlen("FIMENQUANTO\r\n"));
+						leToken();
+						analise->ret = 1;
+						return analise;
+					}
+					erroFechaPar();
+					analise->ret = 0;
+					return analise;
+				}
+				erroEnd();
 				analise->ret = 0;
 				return analise;
 			}
@@ -2174,16 +2271,21 @@ _ret *FOR(int nivel)
 			if (tk == TKDoisPontos)
 			{
 			//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-				strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+				//strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
 				leToken();
+				/*if (tk == TKDoisPontos) {
+					strncat_s(analise->cod, BUFSIZEINI, " passo ", strlen(" passo "));
+				} else {
+					strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+				}*/
 				_ret *val = VAL();
 				if (val->ret)
 				{
-					strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
-					strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
 					if (tk == TKDoisPontos)
 					{
-						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, " passo ", strlen(" passo "));
+						strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
 						leToken();
 						_ret *val2 = VAL();
 						if (!val2->ret)
@@ -2192,8 +2294,14 @@ _ret *FOR(int nivel)
 							analise->ret = 0;
 							return analise;
 						} else {
+							strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
 							strncat_s(analise->cod, BUFSIZEINI, val2->cod, strlen(val2->cod));
+							strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
 						}
+					} else {
+						strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
+						strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
+						strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
 					}
 					int nivel2 = nivel + 1;
 					_ret *bloco = BLOCO(nivel2);
@@ -2470,7 +2578,7 @@ _ret *INICIO()
 	{
 		analise->ret = 1;
 		strncat_s(analise->cod, BUFSIZEINI, "algoritmo 'compiladores'\r\n\r\n", strlen("algoritmo 'compiladores'\r\n\r\n"));
-		strncat_s(analise->cod, BUFSIZEINI, "var\r\n", strlen("var\r\n"));
+		strncat_s(analise->cod, BUFSIZEINI, "var\r\n\t", strlen("var\r\n\t"));
 		int indice;
 		for (indice = 0; indice < nroVariaveis; indice++) {
 			if (indice > 0) {
@@ -2575,7 +2683,7 @@ int main()
 
 	printf("Arquivo gerado com sucesso!");
 
-	getchar();
-	system("pause");
+	//getchar();
+	//system("pause");
 	return 0;
 }
