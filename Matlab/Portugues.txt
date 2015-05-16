@@ -4,38 +4,43 @@ var
 x, minVal, maxVal, a, b, fb, fx, fa, i, r, k : real
 
 inicio
-	x<-10;
-	minVal<-14;
-	maxVal<-50;
-	SE (((x>=minVal) e (x<=maxVal) ou (x = minVal)) ou (x <> minVal)) ENTAO
-		SE (a>b) ENTAO
-			b<-x;
-			SE (a>b) ENTAO
-				b<-x;
-				SE (a>b) ENTAO
-					b<-x;
-				FIMSE
+	x <- 10;
+	minVal <- 14;
+	maxVal <- 50;
+	SE (((x>=minVal) e (x<=maxVal) ou (x = minVal)) ou (x <> minVal))
+		ENTAO
+			SE (a>b)
+				ENTAO
+					b <- x;
+					SE (a>b)
+						ENTAO
+							b <- x;
+							SE (a>b)
+								ENTAO
+									b <- x;
+							FIMSE
+					FIMSE
 			FIMSE
-		FIMSE
-		b<-x;
-		fb<-fx;
-	SENAO
-		a<-x;
-		fa<-fx;
+			b <- x;
+			fb <- fx;
+		SENAO
+			a <- x;
+			fa <- fx;
 	FIMSE
-	SE ((x>=minVal) e (x<=maxVal) ou (x = minVal)) ENTAO
-		b<-x;
-		fb<-fx;
-		a<-x;
-	SENAO
-		fa<-fx;
+	SE ((x>=minVal) e (x<=maxVal) ou (x = minVal))
+		ENTAO
+			b <- x;
+			fb <- fx;
+			a <- x;
+		SENAO
+			fa <- fx;
 	FIMSE
-	x<-teste(12);
-	i<-7;
-	PARA i<-1:r
-		k<-1;
-		PARA i<-1:r
-			k<-1;
+	x <- teste(12);
+	i <- 7;
+	PARA i de 1 ate r FACA
+		k <- 1;
+		PARA i de 1 ate r FACA
+			k <- 1;
 		FIMPARA
 	FIMPARA
 

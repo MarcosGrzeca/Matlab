@@ -581,7 +581,7 @@ _ret *cte()
 	return analise;
 }
 
-_ret *ATRIB(int nivel)
+_ret *ATRIB(int nivel, int origem)
 {
 
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
@@ -590,14 +590,20 @@ _ret *ATRIB(int nivel)
 	_ret *ident = id(1);
 	if (ident->ret)
 	{
-		for (int i = 0; i < nivel; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		if (origem == 0) {
+			for (int i = 0; i < nivel; i++) {
+				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+			}
 		}
 		strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
 		if (tk == TKAtrib)
 		{
 			//strncat_s(analise->cod,1000, tokens[posTK].elemento, sizeof(tokens[posTK].elemento));
-			strncat_s(analise->cod, BUFSIZEINI, "<-", strlen("<-"));
+			if (origem == 1) {
+				strncat_s(analise->cod, BUFSIZEINI, " de ", strlen(" de "));
+			} else {
+				strncat_s(analise->cod, BUFSIZEINI, " <- ", strlen(" <- "));
+			}
 			leToken();
 			_ret *val = VAL();
 			if (val->ret)
@@ -1528,7 +1534,13 @@ _ret *IF(int nivel)
 				if (tk == TKFechaPar)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
+					strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+					//int nivel4 = nivel + 1;
+					nivel = nivel + 1;
+					for (int i = 0; i < nivel; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					}
+					strncat_s(analise->cod, BUFSIZEINI, "ENTAO\r\n", strlen(" ENTAO\r\n"));
 					leToken();
 					int nivel2 = nivel + 1;
 					_ret *bloco = BLOCO(nivel2);
@@ -1556,6 +1568,7 @@ _ret *IF(int nivel)
 						}
 						if (tk == TKEnd)
 						{
+							nivel = nivel -1;
 							for (int i = 0; i < nivel; i++) {
 								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}
@@ -1817,7 +1830,7 @@ _ret *PARFOR(int nivel)
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
 	strncpy_s(analise->cod, 1000, "", strlen(""));
-	_ret *atrib = ATRIB(nivel);
+	_ret *atrib = ATRIB(nivel, 0);
 	if (atrib->ret)
 	{
 		for (int i = 0; i < nivel; i++) {
@@ -1827,6 +1840,7 @@ _ret *PARFOR(int nivel)
 		if (tk == TKDoisPontos)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			//strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
 			leToken();
 			_ret *val = VAL();
 			if (val->ret)
@@ -2152,19 +2166,21 @@ _ret *FOR(int nivel)
 		}
 		strncat_s(analise->cod, BUFSIZEINI, "PARA ", strlen("PARA "));
 		leToken();
-		_ret *atrib = ATRIB(0);
+		_ret *atrib = ATRIB(nivel, 1);
 		if (atrib->ret)
 		{
+			//strncat_s(analise->cod, BUFSIZEINI, " de ", strlen(" de "));
 			strncat_s(analise->cod, BUFSIZEINI, atrib->cod, strlen(atrib->cod));
 			if (tk == TKDoisPontos)
 			{
-				strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+			//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				strncat_s(analise->cod, BUFSIZEINI, " ate ", strlen(" ate "));
 				leToken();
 				_ret *val = VAL();
 				if (val->ret)
 				{
 					strncat_s(analise->cod, BUFSIZEINI, val->cod, strlen(val->cod));
-					strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+					strncat_s(analise->cod, BUFSIZEINI, " FACA\r\n", strlen(" FACA\r\n"));
 					if (tk == TKDoisPontos)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
@@ -2271,7 +2287,7 @@ _ret *COMANDO(int nivel)
 		 int a;
 		 a = 10;
 	}
-	_ret *atrib = ATRIB(nivel);
+	_ret *atrib = ATRIB(nivel, 0);
 
 	if (atrib->ret)
 	{
@@ -2479,8 +2495,7 @@ _ret *INICIO()
 		//analise->cod =(char *) malloc(strlen(analise->cod) + strlen(bloco->cod)+1);
 		strncat_s((char *)analise->cod, (strlen(analise->cod) + strlen(bloco->cod)+2), 
 			(char *)bloco->cod, strlen(bloco->cod));
-		strncat_s(analise->cod, strlen(analise->cod) + strlen("\r\nfimalgoritmo\r\n") +1, 
-			"\r\nfimalgoritmo\r\n", strlen("\r\nfimalgoritmo\r\n"));
+		strncat_s(analise->cod, strlen(analise->cod) + strlen("\r\nfimalgoritmo") +1, "\r\nfimalgoritmo", strlen("\r\nfimalgoritmo"));
 		fprintf(portugues, "%s", analise->cod);
 		return analise;
 	}
