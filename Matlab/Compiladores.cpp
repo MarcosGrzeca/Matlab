@@ -722,7 +722,7 @@ _ret *EXP14()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKPotencia)
 	{
-		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *exp15 = EXP15();
 		if (exp15->ret)
@@ -768,7 +768,7 @@ _ret *EXP13()
 			_ret *exp14 = EXP14();
 			if (exp14->ret)
 			{
-				strncpy_s(analise->cod, 1000, exp14->cod, strlen(exp14->cod));
+				strncat_s(analise->cod, 1000, exp14->cod, strlen(exp14->cod));
 				analise->ret = 1;
 				return analise;
 			}
