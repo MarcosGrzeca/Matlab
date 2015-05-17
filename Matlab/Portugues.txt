@@ -1,54 +1,19 @@
 algoritmo 'compiladores'
 
 var
-	x, n, i, A, a, b, c, d, e, nFactorial, warning, disp : real
+	x, minVal, b, fb, fx, a, B, fa : real
 
 inicio
-	x <- ones(1,10);
-	PARA n de 2 ate 6 FACA
-		x <- x + 5;
-	FIMPARA
-	PARA n de 2 passo 0.5 ate 6 FACA
-		x <- x + 5;
-	FIMPARA
-	PARA i de 1 ate 8 FACA
-		A <- i;
-	FIMPARA
-	a <- a + b;
-	a <- b / c;
-	a <- a - b;
-	a <- a - (c / (b + d)) * e;
-	a <- -a;
-	n <- 1;
-	nFactorial <- 1;
-	ENQUANTO (nFactorial < 1e100) FACA
-		n <- n + 1;
-		nFactorial <- nFactorial * n;
-	FIMENQUANTO
-	ENQUANTO nFactorial < 1e100 FACA
-		n <- n + 1;
-		nFactorial <- nFactorial * n;
-	FIMENQUANTO
-	try
-		a <- notaFunction(5,6);
-	catch
-		warning('Problem using function.  Assigning a value of 0.');
-		a <- 0;
-	end
-	ESCOLHA n
-		CASO -1
-			disp('negative one')
-		CASO 0
-			disp('zero')
-		CASO 1
-			disp('positive one')
-		OUTROCASO
-			disp('other value')
-	FIMESCOLHA
-	a <- a + b;
-	a <- b / c;
-	a <- a - b;
-	a <- a - (c / (b + d)) * e;
-	a <- -a;
+	x <- 10;
+	minVal <- 14;
+	SE (x >= minVal) ENTAO
+		b <- x;
+		fb <- fx;
+	SENAO SE (a < B) ENTAO
+		a <- x;
+		fa <- fx;
+	FIMSE
+	a <- x;
+	fa <- fx;
 
 fimalgoritmo

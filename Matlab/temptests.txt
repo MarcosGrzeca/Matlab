@@ -1,0 +1,69 @@
+algoritmo 'compiladores'
+
+var
+	x, minVal, b, fb, fx, a, B, fa : real
+
+inicio
+
+	x <- 10;
+	minVal <- 14;
+	SE (x >= minVal) ENTAO
+		b <- x;
+		fb <- fx;
+	SENAO SE (a < B) ENTAO
+		a <- x;
+		fa <- fx;
+	FIMSE
+	SENAO1 	SENAO
+		a <- x;
+		fa <- fx;
+	FIMSE
+
+fimalgoritmo
+
+
+se <CONDICAO> entao
+   <CMD>
+senao
+   <CMD>
+fimse
+
+se <CONDICAO> entao
+   <CMD>
+senao se <CONDICAO> entao
+   <CMD>
+   fimse
+fimse
+
+x = 10;
+minVal = 14;
+if (x >= minVal)
+	
+    b=x;
+    fb=fx;
+elseif (a < B)
+    a=x;
+    fa=fx;
+else
+    a=x;
+    fa=fx;
+end
+
+
+							/*adicionei TKEnd no elseif mas ainda não descobri como manipular os blocos.. entao 
+							* ele está pegando o end do do elseif mas tratando ainda no bloco do nivel superior (if)
+
+							*/
+							if (tk == TKEnd)
+							{
+								for (int i = 0; i < nivel; i++) {
+									strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+								}
+								strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+								leToken();
+								analise->ret = 1;
+								return analise;
+							}
+							erroEnd();
+							//analise->ret = 0;
+							//return analise;
