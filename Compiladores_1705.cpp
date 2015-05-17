@@ -1457,7 +1457,7 @@ _ret *ELSE(int nivel)
 		for (int i = 0; i < nivel; i++) {
 			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 		}
-		strncat_s(analise->cod, 1000, "SENAO\r\n", strlen("SENAO\r\n"));//else
+		strncat_s(analise->cod, 1000, "SENAO\r\n", strlen("SENAO\r\n"));
 		leToken();
 		int nivel2 = nivel + 1;
 		_ret *bloco = BLOCO(nivel2);
@@ -1473,13 +1473,7 @@ _ret *ELSE(int nivel)
 		for (int i = 0; i < nivel; i++) {
 			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 		}
-		//strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));//elseif
-		strncat_s(analise->cod, BUFSIZEINI, "SENAO\r\n", strlen("SENAO\r\n"));//elseif
-		int nivel2 = nivel + 1;
-		for (int i = 0; i < nivel2; i++) {
-			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
-		strncat_s(analise->cod, BUFSIZEINI, "SE ", strlen("SE "));//elseif
+		strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
 		leToken();
 		if (tk == TKAbrePar)
 		{
@@ -1495,58 +1489,29 @@ _ret *ELSE(int nivel)
 						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 					}*/
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
 					leToken();
-					////strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					////leToken();
-					int nivel3 = nivel2 + 1;
-					_ret *bloco = BLOCO(nivel3);
+					int nivel2 = nivel + 1;
+					_ret *bloco = BLOCO(nivel2);
 					if (bloco->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 						if (tk == TKElse || tk == TKElseIf)
 						{
-							/*for (int i = 0; i < nivel2; i++) {
+							for (int i = 0; i < nivel; i++) {
 								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-							}*/
-							/*if (tk == TKElse) {
+							}
+							if (tk == TKElse) {
 								strncat_s(analise->cod, BUFSIZEINI, "SENAO ", strlen("SENAO "));
 							} else {
 								strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
-							}*/
-							_ret *elsee = ELSE(nivel2);
+							}
+							_ret *elsee = ELSE(nivel);
 							if (elsee->ret)
 							{
 								strncat_s(analise->cod, BUFSIZEINI, elsee->cod, strlen(elsee->cod));
-								for (int i = 0; i < nivel2; i++) {
-									strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-								}
-								strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
 								analise->ret = 1;
 								return analise;
 							}
-
-							/*adicionei TKEnd no elseif mas ainda não descobri como manipular os blocos.. entao 
-							* ele está pegando o end do do elseif mas tratando ainda no bloco do nivel superior (if)
-
-							*/
-							if (tk == TKEnd)
-							{
-								for (int i = 0; i < nivel; i++) {
-									strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-								}
-								strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
-								leToken();
-								analise->ret = 1;
-								return analise;
-							}
-							erroEnd();
-							//analise->ret = 0;
-							//return analise;
-							/*
-							//editei até aqui
-							*/
-
 							analise->ret = 0;
 							return analise;
 						}
