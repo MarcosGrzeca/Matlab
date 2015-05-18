@@ -616,6 +616,10 @@ _ret *ATRIB(int nivel, int origem)
 			analise->ret = 0;
 			return analise;
 		}
+		//REMOVER ULTIMA VARIAVEL
+		if (nroVariaveis > 0) {
+			nroVariaveis--;
+		}
 		analise->ret = 0;
 		return analise;
 	}

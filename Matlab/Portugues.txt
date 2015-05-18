@@ -1,10 +1,12 @@
 algoritmo 'compiladores'
 
 var
-	a, b, x, minVal, c, d, e, f, y, not, maxVal, fb, fx, B, fa, i, r, k : real
+	a, b, x, minVal, c, d, e, f, y, maxVal, fb, fx, B, fa, i, r, k : real
 
 inicio
-	a <- (b)
+	not(a > 3)
+
+	a <- (b)
 	x <- 10;
 	minVal <- 14;
 	a <- (b + c - d * e / f ^ 2)
