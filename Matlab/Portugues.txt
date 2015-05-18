@@ -7,7 +7,7 @@ inicio
 	a <- (b)
 	x <- 10;
 	minVal <- 14;
-	a <- (b + c - d * e / f^2)
+	a <- (b + c - d * e / f ^ 2)
 	SE (x >= minVal) ENTAO
 		a <- x;
 	SENAO
