@@ -1636,7 +1636,8 @@ _ret *IF(int nivel)
 							for (int i = 0; i < nivel; i++) {
 								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}
-							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+							//strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+							strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
 							leToken();
 							analise->ret = 1;
 							return analise;
