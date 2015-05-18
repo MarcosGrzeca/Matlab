@@ -1,12 +1,14 @@
 algoritmo 'compiladores'
 
 var
-	x, minVal, a, b, c, d, e, f, y : real
+	a, b, x, minVal, c, d, e, f, y : real
 
 inicio
-	x <- 10;
+	a <- (b)
+	x <- 10;
 	minVal <- 14;
-	a <- (b + c - d * e / f^2)	SE (x >= minVal) ENTAO
+	a <- (b + c - d * e / f^2)
+	SE (x >= minVal) ENTAO
 		a <- x;
 	SENAO
 		SE (x = minVal) ENTAO
@@ -19,5 +21,6 @@ inicio
 			FIMSE
 		FIMSE
 	FIMSE
+
 
 fimalgoritmo

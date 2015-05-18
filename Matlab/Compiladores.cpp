@@ -722,7 +722,7 @@ _ret *EXP14()
 	strncpy_s(analise->cod, 1000, "", strlen(""));
 	if (tk == TKPotencia)
 	{
-		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 		leToken();
 		_ret *exp15 = EXP15();
 		if (exp15->ret)
@@ -764,7 +764,7 @@ _ret *EXP13()
 		strncpy_s(analise->cod, 1000, exp15->cod, strlen(exp15->cod));
 		if (tk == TKPotencia)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+		//	strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 			_ret *exp14 = EXP14();
 			if (exp14->ret)
 			{
@@ -2589,6 +2589,8 @@ _ret *BLOCO(int nivel)
 		{
 			strncat_s(analise_bl->cod, 1000, ";\r\n", strlen(";\r\n"));
 			leToken();
+		} else {
+				strncat_s(analise_bl->cod, 1000, "\r\n", strlen("\r\n"));
 		}
 		if (tk == TKId || tk == TKFor || tk == TKWhile || tk == TKSwitch ||
 			tk == TKIf || tk == TKTry || tk == TKParfor || tk == TKFunction ||
