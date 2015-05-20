@@ -1,108 +1,56 @@
 algoritmo 'compiladores'
 
 var
-	a, b, x, minVal, c, d, e, f, y, maxVal, fb, fx, B, fa, i, r, k : real
+	n, x, k, minVal, maxVal : real
 
 inicio
-	not(a > 3)
-
-	a <- (b)
-	x <- 10;
-	minVal <- 14;
-	a <- (b + c - d * e / f ^ 2)
-	SE (x >= minVal) ENTAO
-		a <- x;
+	SE (n = -1) ENTAO 
+		x <- 5;
+		k <- k + 1;
 	SENAO
-		SE (x = minVal) ENTAO
-			b <- x;
+ 		SE (n = 0) ENTAO 
+			x <- 1
 		SENAO
-			SE (x <= minVal) ENTAO
-				c <- x;
+ 			SE (n = 1) ENTAO 
+				x <- 2;
 			SENAO
-				y <- x;
-			FIMSE
-		FIMSE
-	FIMSE
-	not(a > 3)
-
-	x <- 10;
-	minVal <- 14;
-	maxVal <- 50;
-	SE (((x >= minVal) e (x <= maxVal) ou (x = minVal)) ou (x <> minVal) e (x <> minVal)) ENTAO
-		SE (a > b) ENTAO
-			b <- x;
-			SE (a > b) ENTAO
-				b <- x;
-				SE (a > b) ENTAO
-					b <- x;
+ 				x <- 5;
+				SE (n = -1) ENTAO 
+					x <- 5;
+					k <- k + 1;
+				SENAO
+ 					SE (n = 0) ENTAO 
+						x <- 1
+					SENAO
+ 						SE (n = 1) ENTAO 
+							x <- 2;
+						SENAO
+ 							x <- 5;
+						FIMSE
+					FIMSE
 				FIMSE
 			FIMSE
 		FIMSE
-		b <- x;
-		fb <- fx;
+	FIMSE
+	SE (n = -1) ENTAO 
+		x <- 5;
 	SENAO
-		SE (a < B) ENTAO
-			a <- x;
-			fa <- fx;
+ 		SE (n = 0) ENTAO 
+			x <- 5;
 		SENAO
-			a <- x;
-			fa <- fx;
-		FIMSE
-	FIMSE
-	SE ((x >= minVal) e (x <= maxVal) ou (x = minVal)) ENTAO
-		b <- x;
-		fb <- fx;
-		a <- x;
-	SENAO
-		fa <- fx;
-	FIMSE
-	x <- teste(12);
-	i <- 7;
-	PARA i de 1 ate r FACA
-		k <- 1;
-		PARA i de 1 ate r FACA
-			k <- 1;
-		FIMPARA
-
-	FIMPARA
-
-	SE (((x >= minVal) e (x <= maxVal) ou (x = minVal)) ou (x <> minVal) e (x <> minVal)) ENTAO
-		SE (a > b) ENTAO
-			b <- x;
-			SE (a > b) ENTAO
-				b <- x;
-				SE (a > b) ENTAO
-					b <- x;
-				FIMSE
+ 			SE (n = 1) ENTAO 
+				x <- 5;
 			FIMSE
 		FIMSE
-		b <- x;
-		fb <- fx;
+	FIMSE
+	SE ((x >= minVal) e (x <= maxVal)) ENTAO
+		x <- x + 1;
 	SENAO
-		SE (a < B) ENTAO
-			a <- x;
-			fa <- fx;
+		SE (x > maxVal) ENTAO
+			x <- x + 1;
 		SENAO
-			a <- x;
-			fa <- fx;
+			x <- x + 1;
 		FIMSE
 	FIMSE
-	SE ((x >= minVal) e (x <= maxVal) ou (x = minVal)) ENTAO
-		b <- x;
-		fb <- fx;
-		a <- x;
-	SENAO
-		fa <- fx;
-	FIMSE
-	x <- teste(12);
-	i <- 7;
-	PARA i de 1 ate r FACA
-		k <- 1;
-		PARA i de 1 ate r FACA
-			k <- 1;
-		FIMPARA
-
-	FIMPARA
-
 
 fimalgoritmo

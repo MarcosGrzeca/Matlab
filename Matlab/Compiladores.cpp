@@ -2105,7 +2105,7 @@ _ret *CASEVALUE0()
 	return analise;
 }
 
-_ret *CASE(int nivel)
+_ret *CASE(int nivel, char variavel[])
 {
 	_ret *analise = (_ret*)malloc(sizeof(_ret) * 1);
 	analise->cod = (char *)malloc(sizeof(char) * 1000);
@@ -2113,15 +2113,22 @@ _ret *CASE(int nivel)
 	if (tk == TKCase)
 	{
 		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-		//for (int i = 0; i < nivel; i++) {
-		//	strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		//}
-		strncat_s(analise->cod, BUFSIZEINI, "CASO ", strlen("CASO "));
+		for (int i = 0; i < nivel; i++) {
+			strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+		}
+		//strncat_s(analise->cod, BUFSIZEINI, "CASO ", strlen("CASO "));
+		strncat_s(analise->cod, BUFSIZEINI, "SE (", strlen("SE( "));
 		leToken();
 		_ret *casevalue0 = CASEVALUE0();
 		if (casevalue0->ret)
 		{
+			strncat_s(analise->cod, BUFSIZEINI, variavel, strlen(variavel));
+			strncat_s(analise->cod, BUFSIZEINI, " = ", strlen(" = "));
 			strncat_s(analise->cod, BUFSIZEINI, casevalue0->cod, strlen(casevalue0->cod));
+			strncat_s(analise->cod, BUFSIZEINI, ") ENTAO ", strlen(") ENTAO "));
+			
+			
+			
 			strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
 
 			int nivel2 = nivel + 1;
@@ -2131,19 +2138,35 @@ _ret *CASE(int nivel)
 				strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
 				if (tk == TKCase || tk == TKOtherwise)
 				{
+					int ehDefault = 0;
+					if (tk == TKOtherwise) {
+						ehDefault = 1;
+					}
 					for (int i = 0; i < nivel; i++) {
 						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 					}
+
+					strncat_s(analise->cod, BUFSIZEINI, "SENAO\r\n ", strlen("SENAO\r\n "));
+					nivel = nivel + 1;
+					/*for (int i = 0; i < nivel; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					}*/
 					/*if (tk == TKOtherwise) {
 						strncat_s(analise->cod, BUFSIZEINI, "OUTROCASO ", strlen("OUTROCASO "));
 					} else {
 						strncat_s(analise->cod, BUFSIZEINI, "CASO ", strlen("CASO "));
 					}*/
 					//nivel = nivel + 1;
-					_ret *casee = CASE(nivel);
+					_ret *casee = CASE(nivel, variavel);
 					if (casee->ret)
 					{
 						strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
+						if (ehDefault == 0) {
+							for (int i = 0; i < nivel; i++) {
+								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+							}
+							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+						}
 						analise->ret = 1;
 						return analise;
 					}
@@ -2162,10 +2185,11 @@ _ret *CASE(int nivel)
 	else if (tk == TKOtherwise)
 	{
 		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-		strncat_s(analise->cod, BUFSIZEINI, "OUTROCASO\r\n", strlen("OUTROCASO\r\n"));
+		//strncat_s(analise->cod, BUFSIZEINI, "OUTROCASO\r\n", strlen("OUTROCASO\r\n"));
+		//strncat_s(analise->cod, BUFSIZEINI, "SENAO\r\n", strlen("SENAO\r\n"));
 		leToken();
 		int nivel2 = nivel + 1;
-		_ret *bloco = BLOCO(nivel2);
+		_ret *bloco = BLOCO(nivel);
 		if (bloco->ret)
 		{
 			strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
@@ -2187,21 +2211,23 @@ _ret *SWITCH(int nivel)
 	if (tk == TKSwitch)
 	{
 		//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-		for (int i = 0; i < nivel; i++) {
+		/*for (int i = 0; i < nivel; i++) {
 				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-		}
-		strncat_s(analise->cod, BUFSIZEINI, "ESCOLHA ", strlen("ESCOLHA "));
+		}*/
+		
+		//strncat_s(analise->cod, BUFSIZEINI, "ESCOLHA ", strlen("ESCOLHA "));
+		//strncat_s(analise->cod, BUFSIZEINI, "SE ", strlen("SE "));
 		leToken();
 		_ret *ident = id(1);
 		if (ident->ret)
 		{
-			strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
+			/*strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
 			int nivel2 = nivel + 1;
 			strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
 			for (int i = 0; i < nivel2; i++) {
 				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-			}
-			_ret *casee = CASE(nivel2);
+			}*/
+			_ret *casee = CASE(nivel, ident->cod);
 			if (casee->ret)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
@@ -2211,7 +2237,7 @@ _ret *SWITCH(int nivel)
 						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 					}
 					//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, "FIMESCOLHA\r\n", strlen("FIMESCOLHA\r\n"));
+					strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
 
 					leToken();
 					analise->ret = 1;
