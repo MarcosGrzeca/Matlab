@@ -1659,6 +1659,48 @@ _ret *IF(int nivel)
 			}
 			analise->ret = 0;
 			return analise;
+		} else {
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
+			{
+				strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+				strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
+				int nivel2 = nivel + 1;
+				_ret *bloco = BLOCO(nivel2);
+				if (bloco->ret)
+				{
+					strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
+					if (tk == TKElse || tk == TKElseIf)
+					{
+						_ret *elsee = ELSE(nivel);
+						if (!elsee->ret)
+						{
+							analise->ret = 0;
+							return analise;
+						} else {
+							strncat_s(analise->cod, BUFSIZEINI, elsee->cod, strlen(elsee->cod));
+						}
+					}
+					if (tk == TKEnd)
+					{
+						for (int i = 0; i < nivel; i++) {
+							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+						}
+						strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
+						leToken();
+						analise->ret = 1;
+						return analise;
+					}
+					erroEnd();
+					analise->ret = 0;
+					return analise;
+				}
+				analise->ret = 0;
+				return analise;
+			}
+			erroFechaPar();
+			analise->ret = 0;
+			return analise;
 		}
 		erroAbrePar();
 		analise->ret = 0;
@@ -2218,37 +2260,77 @@ _ret *SWITCH(int nivel)
 		//strncat_s(analise->cod, BUFSIZEINI, "ESCOLHA ", strlen("ESCOLHA "));
 		//strncat_s(analise->cod, BUFSIZEINI, "SE ", strlen("SE "));
 		leToken();
-		_ret *ident = id(1);
-		if (ident->ret)
-		{
-			/*strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
-			int nivel2 = nivel + 1;
-			strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
-			for (int i = 0; i < nivel2; i++) {
-				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-			}*/
-			_ret *casee = CASE(nivel, ident->cod);
-			if (casee->ret)
-			{
-				strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
-				if (tk == TKEnd)
-				{
-					for (int i = 0; i < nivel; i++) {
-						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
-					}
-					//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
-					strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
 
-					leToken();
-					analise->ret = 1;
+		if (tk == TKAbrePar) {
+			leToken();
+			_ret *ident = id(1);
+			if (ident->ret)
+			{
+				int marcaPos = setPos();
+				if (tk != TKFechaPar) {
+					erroFechaPar();
+					analise->ret = 0;
 					return analise;
 				}
-				erroEnd();
+				leToken();
+				//strncat_s(ident->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				_ret *casee = CASE(nivel, ident->cod);
+				if (casee->ret)
+				{
+					strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
+					if (tk == TKEnd)
+					{
+						for (int i = 0; i < nivel; i++) {
+							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+						}
+						//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
+
+						leToken();
+						analise->ret = 1;
+						return analise;
+					}
+					erroEnd();
+					analise->ret = 0;
+					return analise;
+				}
 				analise->ret = 0;
 				return analise;
 			}
-			analise->ret = 0;
-			return analise;
+
+		} else {
+			_ret *ident = id(1);
+			if (ident->ret)
+			{
+				/*strncat_s(analise->cod, BUFSIZEINI, ident->cod, strlen(ident->cod));
+				int nivel2 = nivel + 1;
+				strncat_s(analise->cod, BUFSIZEINI, "\r\n", strlen("\r\n"));
+				for (int i = 0; i < nivel2; i++) {
+					strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+				}*/
+				_ret *casee = CASE(nivel, ident->cod);
+				if (casee->ret)
+				{
+					strncat_s(analise->cod, BUFSIZEINI, casee->cod, strlen(casee->cod));
+					if (tk == TKEnd)
+					{
+						for (int i = 0; i < nivel; i++) {
+							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+						}
+						//strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+						strncat_s(analise->cod, BUFSIZEINI, "FIMSE", strlen("FIMSE"));
+
+						leToken();
+						analise->ret = 1;
+						return analise;
+					}
+					erroEnd();
+					analise->ret = 0;
+					return analise;
+				}
+				analise->ret = 0;
+				return analise;
+			}
 		}
 		analise->ret = 0;
 		return analise;
