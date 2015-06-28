@@ -1205,13 +1205,160 @@ _ret *COMP5()
 		leToken();
 		_ret *comp0 = COMP0();
 		if (comp0->ret){
+			int teste;
 			strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
 			if (tk == TKFechaPar)
 			{
 				strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
 				leToken();
 				analise->ret = 1;
+
+				int marcaPos = setPos();
+				char tmp[200];
+				strncpy_s(tmp,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
+				_ret *exp2 = EXP2();
+				if (exp2->ret) {
+					strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+					strncat_s(analise->cod, BUFSIZEINI, exp2->cod, strlen(exp2->cod));
+					/*if (tk == TKFechaPar) {
+						strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+						leToken();
+					}*/
+					analise->ret = 1;
+					return analise;
+				} else {
+					voltaPos(marcaPos);
+					_ret *exp8 = EXP8();
+					if (exp8->ret) {
+						strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+						strncat_s(analise->cod, BUFSIZEINI, exp8->cod, strlen(exp8->cod));
+						/*if (tk == TKFechaPar) {
+							strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+							leToken();
+						}*/
+						analise->ret = 1;
+						return analise;
+					} else {
+						_ret *comp0 = EXP4();
+						if (comp0->ret) {
+							strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+							strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+							/*if (tk == TKFechaPar) {
+								strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+								leToken();
+							}*/
+							analise->ret = 1;
+							return analise;
+						} else {
+							_ret *exp10 = EXP10();
+							if (exp10->ret) {
+								strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+								strncat_s(analise->cod, BUFSIZEINI, exp10->cod, strlen(exp10->cod));
+								/*if (tk == TKFechaPar) {
+									strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+									leToken();
+								}*/
+								analise->ret = 1;
+								return analise;
+							} else {
+								_ret *exp13 = EXP14();
+								if (exp13->ret) {
+									//strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+									strncat_s(analise->cod, BUFSIZEINI, exp13->cod, strlen(exp13->cod));
+									/*if (tk == TKFechaPar) {
+										strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+										leToken();
+									}*/
+									analise->ret = 1;
+									return analise;
+								}
+							}
+						}
+					}
+				}
+				//voltaPos(marcaPos);
 				return analise;
+			} else {
+				int marcaPos = setPos();
+				char tmp[200];
+				strncpy_s(tmp,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
+				_ret *exp2 = EXP2();
+				if (exp2->ret) {
+					strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+					strncat_s(analise->cod, BUFSIZEINI, exp2->cod, strlen(exp2->cod));
+					if (tk == TKFechaPar) {
+						strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+						leToken();
+					}
+					analise->ret = 1;
+					return analise;
+				} else {
+					voltaPos(marcaPos);
+					_ret *exp8 = EXP8();
+					if (exp8->ret) {
+						strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+						strncat_s(analise->cod, BUFSIZEINI, exp8->cod, strlen(exp8->cod));
+						if (tk == TKFechaPar) {
+							strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+							leToken();
+						}
+						analise->ret = 1;
+						return analise;
+					} else {
+						_ret *comp0 = EXP4();
+						if (comp0->ret) {
+							strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+							strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+							if (tk == TKFechaPar) {
+								strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+								leToken();
+							}
+							analise->ret = 1;
+							return analise;
+						} else {
+							_ret *exp10 = EXP10();
+							if (exp10->ret) {
+								strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+								strncat_s(analise->cod, BUFSIZEINI, exp10->cod, strlen(exp10->cod));
+								if (tk == TKFechaPar) {
+									strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+									leToken();
+								}
+								analise->ret = 1;
+								return analise;
+							} else {
+								_ret *exp13 = EXP14();
+								if (exp13->ret) {
+									//strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+									strncat_s(analise->cod, BUFSIZEINI, exp13->cod, strlen(exp13->cod));
+									if (tk == TKFechaPar) {
+										strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+										leToken();
+									}
+									analise->ret = 1;
+									return analise;
+								}
+							}
+							/* else {
+								_ret *exp14 = EXP14();
+								if (exp10->ret) {
+									strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+									strncat_s(analise->cod, BUFSIZEINI, exp10->cod, strlen(exp10->cod));
+									if (tk == TKFechaPar) {
+										strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+										leToken();
+									}
+									analise->ret = 1;
+									return analise;
+								}
+							}*/
+						}
+					}
+					voltaPos(marcaPos);
+					erroFechaPar();
+					analise->ret = 0;
+					return analise;
+				}
 			}
 			erroFechaPar();
 			analise->ret = 0;
@@ -1220,6 +1367,8 @@ _ret *COMP5()
 		analise->ret = 0;
 		return analise;
 	}
+	
+	int marcaPos = setPos();
 	_ret *exp1 = EXP1();
 	if (exp1->ret)
 	{
@@ -1252,6 +1401,74 @@ _ret *COMP5()
 		analise->ret = 1;
 		return analise;
 	}
+
+	/*voltaPos(marcaPos);
+	if (tk == TKSoma) {
+		char tmp[200];
+		strncpy_s(tmp,tokens[posTK].elemento,sizeof(tokens[posTK].elemento));
+		_ret *exp2 = EXP2();
+		if (exp2->ret) {
+			strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+			strncat_s(analise->cod, BUFSIZEINI, exp2->cod, strlen(exp2->cod));
+			if (tk == TKFechaPar) {
+				strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+				leToken();
+			}
+			analise->ret = 1;
+			return analise;
+		} else {
+			voltaPos(marcaPos);
+			_ret *exp8 = EXP8();
+			if (exp8->ret) {
+				strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+				strncat_s(analise->cod, BUFSIZEINI, exp8->cod, strlen(exp8->cod));
+				if (tk == TKFechaPar) {
+					strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+					leToken();
+				}
+				analise->ret = 1;
+				return analise;
+			} else {
+				_ret *comp0 = EXP4();
+				if (comp0->ret) {
+					strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+					strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+					if (tk == TKFechaPar) {
+						strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+						leToken();
+					}
+					analise->ret = 1;
+					return analise;
+				} else {
+					_ret *exp10 = EXP10();
+					if (exp10->ret) {
+						strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+						strncat_s(analise->cod, BUFSIZEINI, exp10->cod, strlen(exp10->cod));
+						if (tk == TKFechaPar) {
+							strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+							leToken();
+						}
+						analise->ret = 1;
+						return analise;
+					} else {
+						_ret *exp13 = EXP14();
+						if (exp13->ret) {
+							//strncat_s(analise->cod, BUFSIZEINI, tmp, strlen(tmp));
+							strncat_s(analise->cod, BUFSIZEINI, exp13->cod, strlen(exp13->cod));
+							if (tk == TKFechaPar) {
+								strncat_s(analise->cod, BUFSIZEINI, ")", strlen(")"));
+								leToken();
+							}
+							analise->ret = 1;
+							return analise;
+						}
+					}
+				}
+			}
+			voltaPos(marcaPos);
+		}
+	}*/
+
 	analise->ret = 0;
 	return analise;
 }
@@ -2868,9 +3085,9 @@ int main()
 	fclose(portugues);
 
 
-	printf("Arquivo gerado com sucesso!");
+	printf("Arquivo gerado com sucesso!\n");
 
 	//getchar();
-	//system("pause");
+	system("pause");
 	return 0;
 }
