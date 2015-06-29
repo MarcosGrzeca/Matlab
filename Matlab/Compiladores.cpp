@@ -1271,6 +1271,32 @@ _ret *COMP5()
 									}*/
 									analise->ret = 1;
 									return analise;
+								} else {
+									if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
+										tk == TKIgual || tk == TKDiferente)
+									{
+										if (tk == TKIgual) {
+											strncat_s(analise->cod, BUFSIZEINI, " = ", strlen(" = "));
+										} else	if (tk == TKDiferente) {
+											strncat_s(analise->cod, BUFSIZEINI, " <> ", strlen(" <> "));
+										} else {
+											strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
+											strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+											strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
+										}
+										leToken();
+
+										_ret *exp1_1 = EXP1();
+										if (exp1_1->ret)
+										{
+											strncat_s(analise->cod, BUFSIZEINI, exp1_1->cod, strlen(exp1_1->cod));
+											analise->ret = 1;
+											return analise;
+										}
+										erroExpInvalida();
+										analise->ret = 0;
+										return analise;
+									}
 								}
 							}
 						}
@@ -1337,6 +1363,32 @@ _ret *COMP5()
 									}
 									analise->ret = 1;
 									return analise;
+								} else {
+									if (tk == TKMaior || tk == TKMaiorIgual || tk == TKMenor || tk == TKMenorIgual ||
+										tk == TKIgual || tk == TKDiferente)
+									{
+										if (tk == TKIgual) {
+											strncat_s(analise->cod, BUFSIZEINI, " = ", strlen(" = "));
+										} else	if (tk == TKDiferente) {
+											strncat_s(analise->cod, BUFSIZEINI, " <> ", strlen(" <> "));
+										} else {
+											strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
+											strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+											strncat_s(analise->cod, BUFSIZEINI, " ", strlen(" "));
+										}
+										leToken();
+
+										_ret *exp1_1 = EXP1();
+										if (exp1_1->ret)
+										{
+											strncat_s(analise->cod, BUFSIZEINI, exp1_1->cod, strlen(exp1_1->cod));
+											analise->ret = 1;
+											return analise;
+										}
+										erroExpInvalida();
+										analise->ret = 0;
+										return analise;
+									}
 								}
 							}
 							/* else {
