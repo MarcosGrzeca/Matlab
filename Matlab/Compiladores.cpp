@@ -1767,7 +1767,7 @@ _ret *ELSE(int nivel)
 				if (tk == TKFechaPar)
 				{
 					/*for (int i = 0; i < nivel; i++) {
-						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+					strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 					}*/
 					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
 					strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
@@ -1782,12 +1782,12 @@ _ret *ELSE(int nivel)
 						if (tk == TKElse || tk == TKElseIf)
 						{
 							/*for (int i = 0; i < nivel2; i++) {
-								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+							strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
 							}*/
 							/*if (tk == TKElse) {
-								strncat_s(analise->cod, BUFSIZEINI, "SENAO ", strlen("SENAO "));
+							strncat_s(analise->cod, BUFSIZEINI, "SENAO ", strlen("SENAO "));
 							} else {
-								strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
+							strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
 							}*/
 							_ret *elsee = ELSE(nivel2);
 							if (elsee->ret)
@@ -1801,7 +1801,7 @@ _ret *ELSE(int nivel)
 								return analise;
 							}
 
-							/*adicionei TKEnd no elseif mas ainda não descobri como manipular os blocos.. entao 
+							/*adicionei TKEnd no elseif mas ainda não descobri como manipular os blocos.. entao
 							* ele está pegando o end do do elseif mas tratando ainda no bloco do nivel superior (if)
 
 							*/
@@ -1838,6 +1838,83 @@ _ret *ELSE(int nivel)
 			erroAbrePar();
 			analise->ret = 0;
 			return analise;
+		}
+		else{//elseif sem parênteses
+			_ret *comp0 = COMP0();
+			if (comp0->ret)
+			{
+				strncat_s(analise->cod, BUFSIZEINI, comp0->cod, strlen(comp0->cod));
+				//if (tk == TKFechaPar)
+				//{
+				/*for (int i = 0; i < nivel; i++) {
+				strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+				}*/
+				//					strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				strncat_s(analise->cod, BUFSIZEINI, " ENTAO\r\n", strlen(" ENTAO\r\n"));
+				//					leToken();
+				////strncat_s(analise->cod, BUFSIZEINI, tokens[posTK].elemento, strlen(tokens[posTK].elemento));
+				////leToken();
+				int nivel3 = nivel2 + 1;
+				_ret *bloco = BLOCO(nivel3);
+				if (bloco->ret)
+				{
+					strncat_s(analise->cod, BUFSIZEINI, bloco->cod, strlen(bloco->cod));
+					if (tk == TKElse || tk == TKElseIf)
+					{
+						/*for (int i = 0; i < nivel2; i++) {
+						strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+						}*/
+						/*if (tk == TKElse) {
+						strncat_s(analise->cod, BUFSIZEINI, "SENAO ", strlen("SENAO "));
+						} else {
+						strncat_s(analise->cod, BUFSIZEINI, "SENAO SE ", strlen("SENAO SE "));
+						}*/
+						_ret *elsee = ELSE(nivel2);
+						if (elsee->ret)
+						{
+							strncat_s(analise->cod, BUFSIZEINI, elsee->cod, strlen(elsee->cod));
+							for (int i = 0; i < nivel2; i++) {
+								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+							}
+							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+							analise->ret = 1;
+							return analise;
+						}
+
+						/*adicionei TKEnd no elseif mas ainda não descobri como manipular os blocos.. entao
+						* ele está pegando o end do do elseif mas tratando ainda no bloco do nivel superior (if)
+
+						*/
+						if (tk == TKEnd)
+						{
+							for (int i = 0; i < nivel; i++) {
+								strncat_s(analise->cod, BUFSIZEINI, "\t", strlen("\t"));
+							}
+							strncat_s(analise->cod, BUFSIZEINI, "FIMSE\r\n", strlen("FIMSE\r\n"));
+							leToken();
+							analise->ret = 1;
+							return analise;
+						}
+						erroEnd();
+						//analise->ret = 0;
+						//return analise;
+						/*
+						//editei até aqui
+						*/
+
+						analise->ret = 0;
+						return analise;
+					}
+					analise->ret = 1;
+					return analise;
+				}
+				analise->ret = 0;
+				return analise;
+				//}//end do if (tk == TKFechaPar)
+				erroFechaPar();
+				analise->ret = 0;
+				return analise;
+			}
 		}
 		analise->ret = 0;
 		return analise;
