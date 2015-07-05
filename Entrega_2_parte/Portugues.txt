@@ -1,0 +1,126 @@
+algoritmo 'compiladores'
+
+var
+	x, a, c, b, v, i, s, n, k, d, te, minVal, maxVal, teste : real
+
+inicio
+	x <- (((x + 3)*2)/5);
+	a <- (5)-(c);
+	b <- 5 ^ 3
+	x <- (((a + 12)+(10 + 32)) > 0);
+	a <- ((5) ^ 3)/(6 * (5 + 6))
+	x <- ((a + 12)+(10 + 32));
+	x <- ((a + 12)-(10 + 32));
+	x <- ((a + 12)*(10 + 32));
+	x <- ((a + 12)/(10 - 32));
+	a <- not('v')
+
+	a <- teste(x,v)
+
+	x <- (((x + 3)*2)/5);
+	a <- 5 - (c);
+	a <- 5 ^ 3
+	x <- ((a + 12)+(10 + 32));
+	x <- ((a + 12)+(10 + 32));
+	x <- ((a + 12)-(10 + 32));
+	x <- ((a + 12)*(10 + 32));
+	x <- ((a + 12)/(10 + 32));
+	ENQUANTO i < 3 FACA
+		s <- s + i;
+		i <- i + 1;
+	FIMENQUANTO
+
+	x <- ((a + 12)+(10 + 32));
+	x <- (a + 12 + 10 + 32);
+	x <- a + 12 + 10 + 32;
+	x <- ((a + 12)+(10 + 32));
+	SE a > b ENTAO
+		x <- a + 10 + 32;
+	FIMSE
+	SE (n = -1) ENTAO 
+		x <- 5;
+		k <- k + 1;
+	FIMSE
+	SE (a > b) ENTAO
+		x <- a + 10 + 32;
+	FIMSE
+	SE a > b + c - d ENTAO
+		x <- a + 10 + 32;
+	FIMSE
+	a <- not(x)
+
+	a <- teste(te)
+
+	SE (n = -1) ENTAO 
+		x <- 5;
+		k <- k + 1;
+	SENAO
+ 		SE (n = 0) ENTAO 
+			x <- 1
+		SENAO
+ 			SE (n = 1) ENTAO 
+				x <- 2;
+			SENAO
+ 				x <- 5;
+				SE (n = -1) ENTAO 
+					x <- 5;
+					k <- k + 1;
+				SENAO
+ 					SE (n = 0) ENTAO 
+						x <- 1
+					SENAO
+ 						SE (n = 1) ENTAO 
+							x <- 2;
+						SENAO
+ 							x <- 5;
+						FIMSE
+					FIMSE
+				FIMSE
+			FIMSE
+		FIMSE
+	FIMSE
+	SE (n = -1) ENTAO 
+		x <- 5;
+	SENAO
+ 		SE (n = 0) ENTAO 
+			x <- 5;
+		SENAO
+ 			SE (n = 1) ENTAO 
+				x <- 5;
+			FIMSE
+		FIMSE
+	FIMSE
+	SE ((x >= minVal) e (x <= maxVal)) ENTAO
+		x <- x + 1;
+	SENAO
+		SE (x > maxVal) ENTAO
+			x <- x + 1;
+		SENAO
+			SE (x > maxVal) ENTAO
+				x <- x + 2
+			SENAO
+				SE x < maxVal ENTAO
+					x <- x + 4;
+				SENAO
+					x <- x + 3;
+				FIMSE
+			FIMSE
+		FIMSE
+	FIMSE
+	SE ((x >= minVal) e (x <= maxVal)) ENTAO
+		SE ((10 + 32) > 0 e (5 > 2)) ENTAO
+			a <- v;
+			x <- (a + 12)+(10 + 32);
+			x <- ((a + 12)-(10 + 32));
+			x <- ((a + 12)*(10 + 32));
+			x <- ((a + 12)/(10 + 32));
+		FIMSE
+	SENAO
+		teste <- a
+	FIMSE
+	PARA i de 0 ate 10 passo -2 FACA
+		x <- 5
+	FIMPARA
+
+
+fimalgoritmo
