@@ -1,9 +1,17 @@
+for t=0:0.01:15.75 
+if t<=1 
+h=50*t^2 
+elseif t<=8 
+h=50+50*(t-1)-5*(t-1)^2 
+else h=155-20*(t-8) 
+end 
+end
 
 x = (((x+3)*2)/5);
 
 a = (5) - (c);
 b = 5 ^ 3
-x = ((a + 12) + (10 + 32));
+x = (((a + 12) + (10 + 32)) > 0);
 
 a = ((5) ^ 3) / (6 * (5 + 6))
 
@@ -11,14 +19,11 @@ a = ((5) ^ 3) / (6 * (5 + 6))
 x = ((a + 12) + (10 + 32));
 x = ((a + 12) - (10 + 32));
 x = ((a + 12) *  (10 + 32));
-x = ((a + 12) / (10 + 32));
+x = ((a + 12) / (10 - 32));
 
-x=((a*b)/3/5^x);
+
 a = not('v')
 a = teste(x, v)
-
-b = func1(22,x,'test');
-disp('text');
 
 x = (((x+3)*2)/5);
 
@@ -31,97 +36,6 @@ x = ((a + 12) - (10 + 32));
 x = ((a + 12) *  (10 + 32));
 x = ((a + 12) / (10 + 32));
 
-
-if a ~= 0
-	a=b+1;
-elseif (b==3)
-	b=4;
-else
-	if a==0
-		a=b;
-	else
-		b=a;
-	end
-end
-
-x = 10;
-minVal = 14;
-if (x >= minVal)
-	
-    b=x;
-    fb=fx;
-elseif (a < B)
-    a=x;
-    fa=fx;
-else
-    a=x;
-    fa=fx;
-end
-if x >= minVal
-    b=x;
-    fb=fx;
-elseif a < B
-    a=x;
-    fa=fx;
-else
-    a=x;
-    fa=fx;
-end
-
-x = 10;
-minVal = 14;
-maxVal = 50;
-if (((x >= minVal) && (x <= maxVal) || (x == minVal)) || (x ~= minVal))
-    if (a > b)
-        b=x;
-        if (a > b)
-            b=x;
-            if (a > b)
-                b=x;
-            end
-        end
-    end
-    b=x;
-    fb=fx;
-elseif (a < B)
-    a=x;
-    fa=fx;
-else
-    a=x;
-    fa=fx;
-end
-if (((x >= minVal) && (x <= maxVal) || (x == minVal)) || (x ~= minVal))
-    if (a > b)
-        b=x;
-        if (a > b)
-            b=x;
-            if (a > b)
-                b=x;
-            end
-        end
-    end
-    b=x;
-    fb=fx;
-else
-    a=x;
-    fa=fx;
-end
-if ((x >= minVal) && (x <= maxVal) || (x == minVal))
-    b=x;
-    fb=fx;
-    a=x;
-else
-    fa=fx;
-end
-x = teste(12);
-
-i = 7;
-for i=1:r
-    k=1;
-    for i=1:r
-        k=1;
-    end
-end
 
 
 while i < 3
@@ -179,21 +93,14 @@ switch n
                 x = 5;
         end
 end
-m=13;
+
 switch n
     case -1
         x = 5;
     case 0
         x = 5;
     case 1
-		switch n
-			case -1
-				x = 5;
-			case 0
-				x = 5;
-			case 1
-				x = 5;
-		end
+        x = 5;
 end
 
 if ((x >= minVal) && (x <= maxVal))
@@ -202,6 +109,25 @@ elseif (x > maxVal)
     x=x+1;
 elseif (x > maxVal)
     x=x+2
+elseif x < maxVal
+    x=x+4;
 else
     x=x+3;
+end
+
+
+if ((x >= minVal) && (x <= maxVal))
+    if ((10 + 32) > 0 && (5 > 2))
+        a = v;
+        x = (a + 12) + (10 + 32);
+        x = ((a + 12) - (10 + 32));
+        x = ((a + 12) *  (10 + 32));
+        x = ((a + 12) / (10 + 32));
+    end
+else 
+    teste = a
+end
+
+for i=0:-2:10
+    x = 5
 end
